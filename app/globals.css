@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #1f2937;
+  --muted: #f3f4f6;
+  --line: #e5e7eb;
+}
+
+body {
+  @apply antialiased text-gray-800 bg-white;
+}
