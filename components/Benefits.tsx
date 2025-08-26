@@ -26,17 +26,12 @@ export default function Benefits() {
           ))}
         </div>
         <div className="flex items-center justify-center">
-          <div className="relative p-6 bg-white rounded-lg shadow">
-            <span className="absolute -z-10 inset-0 flex items-center justify-center">
-              <span className="w-40 h-40 rounded-full bg-muted" />
-            </span>
-            <Image
-              src="/meditation.png"
-              alt="Meditation pose"
-              width={200}
-              height={200}
-            />
-          </div>
+          <Image
+            src="/meditation.png"
+            alt="Meditation pose"
+            width={200}
+            height={200}
+          />
         </div>
         <div className="flex flex-col gap-8">
           {right.map((item) => (
