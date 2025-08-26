@@ -31,7 +31,7 @@ export default function Benefits() {
               <span className="w-40 h-40 rounded-full bg-muted" />
             </span>
             <Image
-              src="https://placehold.co/200x200"
+              src="/meditation.png"
               alt="Meditation pose"
               width={200}
               height={200}
