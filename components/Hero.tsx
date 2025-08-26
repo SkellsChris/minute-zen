@@ -6,8 +6,8 @@ export default function Hero() {
     <section className="relative overflow-hidden rounded-t-3xl" aria-labelledby="hero-heading">
       <div className="absolute inset-0">
         <Image
-          src="https://placehold.co/1200x800"
-          alt="Beach"
+          src="/minute-zen.webp"
+          alt="Meditation on the beach"
           fill
           className="object-cover"
         />
