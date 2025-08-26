@@ -5,22 +5,22 @@ const courses = [
   {
     title: 'Morning Flow',
     text: 'Lorem ipsum dolor sit amet.',
-    img: 'https://placehold.co/400x400?text=Course+1',
+    img: '/nutrition & energie zen.webp',
   },
   {
     title: 'Evening Calm',
     text: 'Lorem ipsum dolor sit amet.',
-    img: 'https://placehold.co/400x400?text=Course+2',
+    img: '/productivite & stress.webp',
   },
   {
     title: 'Mindful Breathing',
     text: 'Lorem ipsum dolor sit amet.',
-    img: 'https://placehold.co/400x400?text=Course+3',
+    img: '/respiration & relaxation.webp',
   },
   {
     title: 'Deep Stretch',
     text: 'Lorem ipsum dolor sit amet.',
-    img: 'https://placehold.co/400x400?text=Course+4',
+    img: '/yoga & mouvements rapides.webp',
   },
 ]
 
