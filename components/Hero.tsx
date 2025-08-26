@@ -33,16 +33,6 @@ export default function Hero() {
             Découvrir
           </a>
         </div>
-        <div className="relative mt-10">
-          <div className="absolute -inset-x-10 bottom-0 top-10 bg-gradient-to-r from-blue-100 to-transparent blur-3xl rounded-full" />
-          <Image
-            src="https://placehold.co/300x300"
-            alt="Person meditating"
-            width={300}
-            height={300}
-            className="relative z-10"
-          />
-        </div>
       </div>
     </section>
   )
