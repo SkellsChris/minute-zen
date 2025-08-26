@@ -20,7 +20,7 @@ export default function Benefits() {
         Benefits
       </h2>
       <div className="grid max-w-7xl mx-auto gap-12 px-4 md:grid-cols-2 lg:grid-cols-3">
-        <div className="flex flex-col gap-8">
+        <div className="flex h-full flex-col justify-between">
           {left.map((item) => (
             <BenefitItem key={item.title} align="left" {...item} />
           ))}
@@ -33,7 +33,7 @@ export default function Benefits() {
             height={400}
           />
         </div>
-        <div className="flex flex-col gap-8">
+        <div className="flex h-full flex-col justify-between">
           {right.map((item) => (
             <BenefitItem key={item.title} align="right" {...item} />
           ))}
