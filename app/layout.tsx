@@ -9,6 +9,9 @@ export const metadata: Metadata = {
     title: 'MinuteZen — Harmony of Body, Peace of Mind',
     description: 'Daily yoga & meditation for body and mind.',
   },
+  icons: {
+    icon: '/minute-zen.webp',
+  },
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
