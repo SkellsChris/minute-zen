@@ -6,10 +6,11 @@ export default function Hero() {
     <section className="relative overflow-hidden rounded-t-3xl" aria-labelledby="hero-heading">
       <div className="absolute inset-0">
         <Image
-          src="https://placehold.co/1200x800"
-          alt="Beach"
+          src="/minute%20zen.webp"
+          alt="Minute Zen"
           fill
           className="object-cover"
+          priority
         />
         <div className="absolute inset-0 bg-gradient-to-b from-blue-200/30" />
       </div>
