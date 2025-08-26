@@ -29,8 +29,8 @@ export default function Benefits() {
           <Image
             src="/meditation.png"
             alt="Meditation pose"
-            width={200}
-            height={200}
+            width={400}
+            height={400}
           />
         </div>
         <div className="flex flex-col gap-8">
