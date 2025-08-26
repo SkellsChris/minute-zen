@@ -4,7 +4,7 @@ import Icon from './Icon'
 export default function Header() {
   const nav = ['Home', 'About', 'Courses', 'Pages', 'Blog', 'Contact']
   return (
-    <header className="border-b border-line">
+    <header className="border-line">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3 md:px-6">
         <div className="flex items-center gap-2">
           <Icon name="lotus" className="w-6 h-6" />
