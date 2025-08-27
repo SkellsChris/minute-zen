@@ -17,7 +17,7 @@ export default function Footer() {
           <p className="mt-2 text-sm text-gray-600">Votre pause bien-être en 5 minutes, où que vous soyez.</p>
         </div>
         <div>
-          <h3 className="font-medium">Quick Links</h3>
+          <h3 className="font-medium">Nos guides</h3>
           <ul className="mt-4 space-y-2 text-sm">
             {['Home', 'About', 'Courses', 'Pages', 'Blog', 'Contact'].map((link) => (
               <li key={link}>
