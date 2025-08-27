@@ -2,6 +2,7 @@
 import Icon from './Icon'
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear()
   return (
     <footer className="mt-20 border-t border-line" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
@@ -76,7 +77,7 @@ export default function Footer() {
             </li>
           </ul>
         </nav>
-        <p className="mt-2">© 2024 MinuteZen</p>
+        <p className="mt-2">© {currentYear} MinuteZen</p>
       </div>
     </footer>
   )
