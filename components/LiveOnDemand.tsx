@@ -2,12 +2,12 @@
 import Icon, { IconName } from './Icon'
 
 const categories: { icon: IconName; label: string }[] = [
-  { icon: 'spark', label: 'Energy' },
-  { icon: 'mind', label: 'Mind-Body' },
-  { icon: 'sleep', label: 'Sleep' },
-  { icon: 'breath', label: 'Breath' },
-  { icon: 'focus', label: 'Focus' },
-  { icon: 'mobility', label: 'Mobility' },
+  { icon: 'spark', label: 'Énergie' },
+  { icon: 'mind', label: 'Corps & esprit' },
+  { icon: 'sleep', label: 'Sommeil' },
+  { icon: 'breath', label: 'Respiration' },
+  { icon: 'focus', label: 'Concentration' },
+  { icon: 'mobility', label: 'Mobilité' },
 ]
 
 export default function LiveOnDemand() {
