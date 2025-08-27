@@ -48,25 +48,35 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-line py-4 text-center text-sm">
-        © 2024 MinuteZen ·{' '}
-        <a
-          href="/mentions-legales"
-          className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ink"
-        >
-          Mentions légales
-        </a>{' '}·{' '}
-        <a
-          href="/politique-cookies"
-          className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ink"
-        >
-          Politique cookies
-        </a>{' '}·{' '}
-        <a
-          href="/politique-confidentialite"
-          className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ink"
-        >
-          Politique de confidentialité
-        </a>
+        <nav aria-label="Pages légales">
+          <ul className="flex flex-wrap justify-center gap-4 list-none p-0 m-0">
+            <li>
+              <a
+                href="/mentions-legales"
+                className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ink"
+              >
+                Mentions légales
+              </a>
+            </li>
+            <li>
+              <a
+                href="/politique-cookies"
+                className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ink"
+              >
+                Politique cookies
+              </a>
+            </li>
+            <li>
+              <a
+                href="/politique-confidentialite"
+                className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ink"
+              >
+                Politique de confidentialité
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <p className="mt-2">© 2024 MinuteZen</p>
       </div>
     </footer>
   )
