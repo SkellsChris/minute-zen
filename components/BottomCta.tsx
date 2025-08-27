@@ -9,7 +9,7 @@ export default function BottomCta() {
           <div className="flex items-center gap-3">
             <Icon name="lotus" className="h-8 w-8" />
             <h2 id="cta-heading" className="text-2xl font-semibold">
-              Visiter le site
+              Découvrir les cours
             </h2>
           </div>
           <a
