@@ -29,7 +29,7 @@ export default function Courses() {
     <section className="py-20" aria-labelledby="courses-heading">
       <div className="max-w-7xl mx-auto px-4 text-center">
         <h2 id="courses-heading" className="text-3xl font-bold">
-          Explore our Yoga &amp; Meditation Course Collection.
+          Découvrez nos micro-séances MinuteZen
         </h2>
         <p className="mt-4 max-w-3xl mx-auto text-gray-600">
           Faites une micro-séance de 3 à 5 minutes pour détendre le corps, calmer le mental et repartir concentré.
