@@ -14,7 +14,7 @@ export default function Footer() {
             <Icon name="lotus" className="h-6 w-6" />
             <span className="font-semibold">MinuteZen</span>
           </div>
-          <p className="mt-2 text-sm text-gray-600">Lorem ipsum dolor sit amet.</p>
+          <p className="mt-2 text-sm text-gray-600">Votre pause bien-être en 5 minutes, où que vous soyez.</p>
         </div>
         <div>
           <h3 className="font-medium">Quick Links</h3>

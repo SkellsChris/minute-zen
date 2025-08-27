@@ -4,22 +4,22 @@ import Image from 'next/image'
 const courses = [
   {
     title: 'Morning Flow',
-    text: 'Lorem ipsum dolor sit amet.',
+    text: 'Votre pause bien-être en 5 minutes, où que vous soyez.',
     img: '/nutrition & energie zen.webp',
   },
   {
     title: 'Evening Calm',
-    text: 'Lorem ipsum dolor sit amet.',
+    text: 'Votre pause bien-être en 5 minutes, où que vous soyez.',
     img: '/productivite & stress.webp',
   },
   {
     title: 'Mindful Breathing',
-    text: 'Lorem ipsum dolor sit amet.',
+    text: 'Votre pause bien-être en 5 minutes, où que vous soyez.',
     img: '/respiration & relaxation.webp',
   },
   {
     title: 'Deep Stretch',
-    text: 'Lorem ipsum dolor sit amet.',
+    text: 'Votre pause bien-être en 5 minutes, où que vous soyez.',
     img: '/yoga & mouvements rapides.webp',
   },
 ]
