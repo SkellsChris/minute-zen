@@ -18,7 +18,7 @@ export default function Hero() {
         <h1 id="hero-heading" className="text-4xl md:text-6xl font-bold leading-tight max-w-2xl">
           Reset zen en 5 minutes
         </h1>
-        <p className="max-w-md text-sm md:text-base">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p className="max-w-md text-sm md:text-base">Faites une micro-séance de 3 à 5 minutes pour détendre le corps, calmer le mental et repartir concentré.</p>
         <div className="flex gap-4">
           <a
             href="#"

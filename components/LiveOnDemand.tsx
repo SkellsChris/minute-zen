@@ -18,7 +18,7 @@ export default function LiveOnDemand() {
           Live &amp; On-Demand
         </h2>
         <p className="mt-4 max-w-2xl mx-auto text-gray-600">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Faites une micro-séance de 3 à 5 minutes pour détendre le corps, calmer le mental et repartir concentré.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-6">
           {categories.map((c) => (
