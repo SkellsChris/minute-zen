@@ -32,7 +32,7 @@ export default function Courses() {
           Explore our Yoga &amp; Meditation Course Collection.
         </h2>
         <p className="mt-4 max-w-3xl mx-auto text-gray-600">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Faites une micro-séance de 3 à 5 minutes pour détendre le corps, calmer le mental et repartir concentré.
         </p>
         <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {courses.map((c) => (
