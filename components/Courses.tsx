@@ -4,22 +4,22 @@ import Image from 'next/image'
 const courses = [
   {
     title: 'Flow du matin',
-    text: 'Votre pause bien-être en 5 minutes, où que vous soyez.',
+    text: 'Un réveil énergétique pour stimuler le corps, clarifier l’esprit et démarrer la journée avec vitalité.',
     img: '/nutrition & energie zen.webp',
   },
   {
     title: 'Calme du soir',
-    text: 'Votre pause bien-être en 5 minutes, où que vous soyez.',
+    text: 'Une routine douce pour relâcher les tensions, apaiser le mental et favoriser un sommeil réparateur.',
     img: '/productivite & stress.webp',
   },
   {
     title: 'Respiration consciente',
-    text: 'Votre pause bien-être en 5 minutes, où que vous soyez.',
+    text: 'Quelques minutes pour retrouver votre calme intérieur, réguler le stress et vous recentrer.',
     img: '/respiration & relaxation.webp',
   },
   {
     title: 'Étirements profonds',
-    text: 'Votre pause bien-être en 5 minutes, où que vous soyez.',
+    text: 'Libérez les raideurs accumulées, améliorez votre souplesse et redonnez de la fluidité à vos mouvements.',
     img: '/yoga & mouvements rapides.webp',
   },
 ]
