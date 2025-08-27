@@ -47,7 +47,15 @@ export default function Footer() {
           </form>
         </div>
       </div>
-      <div className="border-t border-line py-4 text-center text-sm">© 2024 MinuteZen</div>
+      <div className="border-t border-line py-4 text-center text-sm">
+        © 2024 MinuteZen ·{' '}
+        <a
+          href="/mentions-legales"
+          className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ink"
+        >
+          Mentions légales
+        </a>
+      </div>
     </footer>
   )
 }
