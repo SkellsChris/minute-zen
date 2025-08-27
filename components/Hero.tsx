@@ -14,7 +14,7 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-blue-200/30" />
       </div>
       <div className="relative min-h-[70vh] flex flex-col items-center justify-center text-center px-4 py-20 gap-6">
-        <p className="text-sm uppercase tracking-wider">Daily Yoga &amp; Meditation</p>
+        <p className="text-sm uppercase tracking-wider">Harmonie du corps, apaisement de l’esprit.</p>
         <h1 id="hero-heading" className="text-4xl md:text-6xl font-bold leading-tight max-w-2xl">
           Reset zen en 5 minutes
         </h1>
