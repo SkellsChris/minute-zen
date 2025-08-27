@@ -1,4 +1,5 @@
 // Section: Header
+import Link from 'next/link'
 import Icon from './Icon'
 
 export default function Header() {
@@ -6,15 +7,19 @@ export default function Header() {
   return (
     <header className="border-line">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3 md:px-6">
-        <div className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <Icon name="lotus" className="w-6 h-6" />
           <span className="font-semibold">MinuteZen</span>
-        </div>
+        </Link>
         <nav className="hidden md:flex gap-6 text-sm">
           {nav.map((item) => (
-            <a key={item} href="#" className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ink">
+            <Link
+              key={item}
+              href={item === 'Accueil' ? '/' : '#'}
+              className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ink"
+            >
               {item}
-            </a>
+            </Link>
           ))}
         </nav>
         <div className="flex items-center gap-4">
