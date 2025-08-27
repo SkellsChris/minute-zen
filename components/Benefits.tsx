@@ -49,13 +49,20 @@ function BenefitItem({ icon, title, text, align }: { icon: IconName; title: stri
       {align === 'right' && (
         <span className="hidden lg:block absolute right-full top-5 w-8 border-t border-dashed border-line" />
       )}
-      <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-muted">
-        <Icon name={icon} className="w-5 h-5" />
-      </span>
+      {align === 'right' && (
+        <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-muted">
+          <Icon name={icon} className="w-5 h-5" />
+        </span>
+      )}
       <div>
         <h3 className="font-medium">{title}</h3>
         <p className="text-sm text-gray-600">{text}</p>
       </div>
+      {align === 'left' && (
+        <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-muted">
+          <Icon name={icon} className="w-5 h-5" />
+        </span>
+      )}
       {align === 'left' && (
         <span className="hidden lg:block absolute left-full top-5 w-8 border-t border-dashed border-line" />
       )}
