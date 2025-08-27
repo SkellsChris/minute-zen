@@ -16,7 +16,7 @@ export default function Hero() {
       <div className="relative min-h-[70vh] flex flex-col items-center justify-center text-center px-4 py-20 gap-6">
         <p className="text-sm uppercase tracking-wider">Daily Yoga &amp; Meditation</p>
         <h1 id="hero-heading" className="text-4xl md:text-6xl font-bold leading-tight max-w-2xl">
-          HARMONY OF BODY, PEACE OF MIND.
+          Reset zen en 5 minutes
         </h1>
         <p className="max-w-md text-sm md:text-base">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         <div className="flex gap-4">
