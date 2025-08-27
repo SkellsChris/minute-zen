@@ -27,7 +27,7 @@ export default function Hero() {
             Commencer
           </a>
           <a
-            href="#"
+            href="/ressources-gratuites"
             className="rounded-full px-6 py-3 text-sm text-white border border-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white"
           >
             Découvrir
