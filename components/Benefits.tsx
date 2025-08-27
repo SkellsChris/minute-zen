@@ -5,12 +5,12 @@ import Icon, { IconName } from './Icon'
 type Item = { icon: IconName; title: string; text: string }
 
 const items: Item[] = [
-  { icon: 'mind',   title: 'Stress Reduction',                   text: 'Apaisement rapide en quelques minutes.' },
-  { icon: 'sleep',  title: 'Improved Mental Health',             text: 'Allégez tensions et charge mentale.' },
-  { icon: 'focus',  title: 'Flexibility & Physical Strength',    text: 'Bougez mieux, respirez mieux.' },
-  { icon: 'mobility', title: 'Mind–Body Connection',             text: 'Reliez souffle et posture.' },
-  { icon: 'breath', title: 'Energy & Vitality',                  text: 'Relancez l’énergie sans café.' },
-  { icon: 'spark',  title: 'Concentration & Focus',              text: 'Clarté mentale instantanée.' },
+  { icon: 'mind',   title: 'Réduction du stress',                text: 'Apaisement rapide en quelques minutes.' },
+  { icon: 'sleep',  title: 'Sérénité mentale',                   text: 'Allégez tensions et charge mentale.' },
+  { icon: 'focus',  title: 'Souplesse et vitalité',              text: 'Bougez mieux, respirez mieux.' },
+  { icon: 'mobility', title: 'Connexion corps-esprit',           text: 'Reliez souffle et posture.' },
+  { icon: 'breath', title: 'Recharge rapide',                    text: 'Relancez l’énergie sans café.' },
+  { icon: 'spark',  title: 'Concentration instantanée',          text: 'Clarté mentale instantanée.' },
 ]
 
 // utilitaire: coupe en 2 colonnes égales
