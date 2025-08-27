@@ -60,6 +60,12 @@ export default function Footer() {
           className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ink"
         >
           Politique cookies
+        </a>{' '}·{' '}
+        <a
+          href="/politique-confidentialite"
+          className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ink"
+        >
+          Politique de confidentialité
         </a>
       </div>
     </footer>
