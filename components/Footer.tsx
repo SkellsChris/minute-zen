@@ -22,7 +22,7 @@ export default function Footer() {
             {['Home', 'About', 'Courses', 'Pages', 'Blog', 'Contact'].map((link) => (
               <li key={link}>
                 <a
-                  href="#"
+                  href={link === 'Contact' ? '/contact' : '#'}
                   className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ink"
                 >
                   {link}

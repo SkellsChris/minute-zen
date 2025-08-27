@@ -3,7 +3,12 @@ import Link from 'next/link'
 import Icon from './Icon'
 
 export default function Header() {
-  const nav = ['Accueil', 'Ressources gratuites', 'Blog', 'Contact']
+  const nav = [
+    { name: 'Accueil', href: '/' },
+    { name: 'Ressources gratuites', href: '#' },
+    { name: 'Blog', href: '#' },
+    { name: 'Contact', href: '/contact' },
+  ]
   return (
     <header className="border-line">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3 md:px-6">
@@ -14,11 +19,11 @@ export default function Header() {
         <nav className="hidden md:flex gap-6 text-sm">
           {nav.map((item) => (
             <Link
-              key={item}
-              href={item === 'Accueil' ? '/' : '#'}
+              key={item.name}
+              href={item.href}
               className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ink"
             >
-              {item}
+              {item.name}
             </Link>
           ))}
         </nav>
