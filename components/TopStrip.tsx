@@ -13,7 +13,7 @@ export default function TopStrip() {
           href="#"
           className="text-sm underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ink"
         >
-          View Classes
+          Découvrir les cours
         </a>
       </div>
     </div>
