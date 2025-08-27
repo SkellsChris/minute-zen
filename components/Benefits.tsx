@@ -1,71 +1,109 @@
-// Section: Benefits
+// Section: Benefits (capture-2 style)
 import Image from 'next/image'
 import Icon, { IconName } from './Icon'
 
 const items: { icon: IconName; title: string; text: string }[] = [
-  { icon: 'mind', title: 'Stress Relief', text: 'Lorem ipsum dolor sit amet.' },
-  { icon: 'sleep', title: 'Sleep', text: 'Lorem ipsum dolor sit amet.' },
-  { icon: 'focus', title: 'Focus', text: 'Lorem ipsum dolor sit amet.' },
-  { icon: 'mobility', title: 'Mobility', text: 'Lorem ipsum dolor sit amet.' },
-  { icon: 'breath', title: 'Breath', text: 'Lorem ipsum dolor sit amet.' },
-  { icon: 'spark', title: 'Energy', text: 'Lorem ipsum dolor sit amet.' },
+  { icon: 'mind', title: 'Stress Reduction', text: 'Adoptez un apaisement rapide et durable.' },
+  { icon: 'sleep', title: 'Improved Mental Health', text: 'Allégez les tensions en quelques minutes.' },
+  { icon: 'focus', title: 'Enhanced Flexibility & Strength', text: 'Bougez mieux, respirez mieux.' },
+  { icon: 'mobility', title: 'Mind–Body Connection', text: 'Ancrez-vous, reliez souffle et posture.' },
+  { icon: 'breath', title: 'Increased Energy & Vitality', text: 'Relancez l’énergie sans café.' },
+  { icon: 'spark', title: 'Enhanced Concentration & Focus', text: 'Clarté mentale en un instant.' },
 ]
 
+// keep 3 items left / 3 right
+const left = items.slice(0, 3)
+const right = items.slice(3)
+
 export default function Benefits() {
-  const left = items.slice(0, 3)
-  const right = items.slice(3)
   return (
     <section className="py-20" aria-labelledby="benefits-heading">
-      <h2 id="benefits-heading" className="sr-only">
-        Benefits
-      </h2>
-      <div className="grid max-w-7xl mx-auto gap-12 px-4 md:grid-cols-2 lg:grid-cols-3">
-        <div className="flex h-full flex-col justify-between">
+      <h2 id="benefits-heading" className="sr-only">Benefits</h2>
+
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 md:px-6 lg:grid-cols-3 lg:gap-16">
+        {/* LEFT COLUMN */}
+        <ul className="order-2 space-y-12 lg:order-1">
           {left.map((item) => (
-            <BenefitItem key={item.title} align="left" {...item} />
+            <li key={item.title}>
+              <BenefitItem align="left" {...item} />
+            </li>
           ))}
+        </ul>
+
+        {/* CENTER IMAGE WITH HALO */}
+        <div className="order-1 flex items-center justify-center lg:order-2">
+          <div className="relative">
+            <div className="absolute inset-0 -z-10 m-auto size-80 rounded-full bg-blue-50/90 blur-[0.5px]" />
+            <Image
+              src="/meditation.png"
+              alt="Meditation pose"
+              width={420}
+              height={420}
+              className="drop-shadow-sm"
+              priority
+            />
+          </div>
         </div>
-        <div className="flex items-center justify-center">
-          <Image
-            src="/meditation.png"
-            alt="Meditation pose"
-            width={400}
-            height={400}
-          />
-        </div>
-        <div className="flex h-full flex-col justify-between">
+
+        {/* RIGHT COLUMN */}
+        <ul className="order-3 space-y-12">
           {right.map((item) => (
-            <BenefitItem key={item.title} align="right" {...item} />
+            <li key={item.title}>
+              <BenefitItem align="right" {...item} />
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   )
 }
 
-function BenefitItem({ icon, title, text, align }: { icon: IconName; title: string; text: string; align: 'left' | 'right' }) {
+function BenefitItem({
+  icon,
+  title,
+  text,
+  align,
+}: {
+  icon: IconName
+  title: string
+  text: string
+  align: 'left' | 'right'
+}) {
+  const isRight = align === 'right'
+
   return (
-    <div className={`relative flex items-start gap-4 ${align === 'right' ? 'lg:pl-8' : 'lg:pr-8'}`}>
-      {align === 'right' && (
-        <span className="hidden lg:block absolute right-full top-5 w-8 border-t border-dashed border-line" />
-      )}
-      {align === 'right' && (
-        <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-muted">
-          <Icon name={icon} className="w-5 h-5" />
+    <div
+      className={[
+        'relative flex items-start gap-4',
+        isRight ? 'justify-end lg:pl-10' : 'lg:pr-10',
+      ].join(' ')}
+    >
+      {/* Outer icon (stays at the outer edge) */}
+      {isRight ? null : (
+        <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full ring-1 ring-gray-200 bg-white">
+          <Icon name={icon} className="h-5 w-5 opacity-80" />
         </span>
       )}
-      <div>
-        <h3 className="font-medium">{title}</h3>
-        <p className="text-sm text-gray-600">{text}</p>
+
+      {/* Text block */}
+      <div className={isRight ? 'text-right' : 'text-left'}>
+        <h3 className="text-sm font-semibold text-gray-800">{title}</h3>
+        <p className="mt-1 max-w-xs text-xs leading-relaxed text-gray-500">{text}</p>
       </div>
-      {align === 'left' && (
-        <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-muted">
-          <Icon name={icon} className="w-5 h-5" />
+
+      {isRight ? (
+        <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full ring-1 ring-gray-200 bg-white">
+          <Icon name={icon} className="h-5 w-5 opacity-80" />
         </span>
-      )}
-      {align === 'left' && (
-        <span className="hidden lg:block absolute left-full top-5 w-8 border-t border-dashed border-line" />
-      )}
+      ) : null}
+
+      {/* Dashed connector toward the center circle */}
+      <span
+        className={[
+          'pointer-events-none absolute top-5 hidden w-16 border-t border-dashed border-gray-300 lg:block',
+          isRight ? 'right-full' : 'left-full',
+        ].join(' ')}
+      />
     </div>
   )
 }
