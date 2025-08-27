@@ -28,7 +28,7 @@ export default function Header() {
             href="#"
             className="hidden md:inline-flex items-center gap-1 rounded-full border border-ink px-4 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ink"
           >
-            Visiter le site
+            Découvrir les cours
             <Icon name="arrow-up-right" className="w-4 h-4" />
           </a>
         </div>
