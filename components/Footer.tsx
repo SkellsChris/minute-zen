@@ -18,18 +18,6 @@ export default function Footer() {
         </div>
         <div>
           <h3 className="font-medium">Nos guides</h3>
-          <ul className="mt-4 space-y-2 text-sm">
-            {['Home', 'About', 'Courses', 'Pages', 'Blog', 'Contact'].map((link) => (
-              <li key={link}>
-                <a
-                  href={link === 'Contact' ? '/contact' : '#'}
-                  className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ink"
-                >
-                  {link}
-                </a>
-              </li>
-            ))}
-          </ul>
         </div>
         <div>
           <h3 className="font-medium">Newsletter</h3>
