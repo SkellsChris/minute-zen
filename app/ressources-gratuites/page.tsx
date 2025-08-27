@@ -144,8 +144,8 @@ export default function RessourcesGratuites() {
             📚 Ressources gratuites – MinuteZen
           </h1>
           <p className="mt-3 text-gray-600">
-            Explore des cours et guides pour progresser avec l’IA et la productivité.
-            Sélection régulière de contenus de qualité — certains gratuits, d’autres pour abonnés Plus.
+            Découvrez des ressources pratiques pour vous détendre rapidement, réduire le stress et rester productif au quotidien. 
+  Des outils simples, accessibles à tous — certains gratuits, d’autres réservés aux abonnés Plus.
           </p>
         </header>
 
