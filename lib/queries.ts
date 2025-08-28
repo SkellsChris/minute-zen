@@ -65,3 +65,25 @@ export const ARTICLE_BY_SLUG_QUERY = /* GraphQL */ `
     }
   }
 `;
+
+export const ALL_ARTICLES_QUERY = /* GraphQL */ `
+  {
+    allArticles(orderBy: _firstPublishedAt_DESC) {
+      title
+      slug
+      lecture
+      image {
+        responsiveImage(imgixParams: { auto: format, fit: crop, w: 800, h: 400 }) {
+          src
+          srcSet
+          sizes
+          width
+          height
+          alt
+          title
+          base64
+        }
+      }
+    }
+  }
+`;
