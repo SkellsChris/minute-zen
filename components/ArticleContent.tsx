@@ -1,20 +1,8 @@
 // components/ArticleContent.tsx
-import { StructuredText, renderNodeRule } from 'react-datocms';
-import type { Article, FaqBlock } from '@/lib/types';
-import FaqBlockComp from './FaqBlock';
+import type { Article } from '@/lib/types';
 
 export default function ArticleContent({ article }: { article: Article }) {
-  const blocks = article.content?.blocks || [];
-  return (
-    <StructuredText
-      data={article.content?.value}
-      renderBlock={({ record }) => {
-        if (record.__typename === 'FaqRecord') {
-          const b = record as FaqBlock;
-          return <FaqBlockComp key={b.id} item={b} />;
-        }
-        return null;
-      }}
-    />
-  );
+  // Rendering of structured content from DatoCMS is not available without external dependencies.
+  // For now, output the raw JSON for debugging purposes.
+  return <pre className="whitespace-pre-wrap">{JSON.stringify(article.content?.value, null, 2)}</pre>;
 }
