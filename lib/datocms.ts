@@ -1,5 +1,7 @@
 // lib/datocms.ts
 import 'server-only';
+import { ALL_ARTICLES_QUERY } from './queries';
+import type { Article } from './types';
 
 const TOKEN = process.env.DATOCMS_API_TOKEN; // même nom que sur Vercel
 if (!TOKEN) {
@@ -45,4 +47,27 @@ export async function datoRequest<T = any>(
     throw new Error('❌ Réponse vide de DatoCMS.');
   }
   return json.data;
+}
+
+export const client = {
+  request: datoRequest,
+};
+
+export async function getAllArticles(): Promise<Pick<Article, 'title' | 'slug' | 'lecture' | 'image'>[]> {
+  const all: Pick<Article, 'title' | 'slug' | 'lecture' | 'image'>[] = [];
+  const PAGE_SIZE = 50;
+  let skip = 0;
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    const { allArticles } = await datoRequest<{ allArticles: Pick<Article, 'title' | 'slug' | 'lecture' | 'image'>[] }>(
+      ALL_ARTICLES_QUERY,
+      { first: PAGE_SIZE, skip }
+    );
+    all.push(...allArticles);
+    if (allArticles.length < PAGE_SIZE) {
+      break;
+    }
+    skip += PAGE_SIZE;
+  }
+  return all;
 }
