@@ -4,7 +4,7 @@ import { ARTICLE_BY_SLUG_QUERY, ARTICLE_SLUGS_QUERY } from '@/lib/queries';
 import Seo from '@/components/Seo';
 import ArticleContent from '@/components/ArticleContent';
 import AuthorBio from '@/components/AuthorBio';
-import { Image as DatoImage } from 'react-datocms';
+import Image from 'next/image';
 import type { Article } from '@/lib/types';
 
 export default function ArticlePage({ article }: { article: Article }) {
@@ -19,7 +19,13 @@ export default function ArticlePage({ article }: { article: Article }) {
 
         {article.image?.responsiveImage && (
           <div className="mb-8 overflow-hidden rounded-2xl">
-            <DatoImage data={article.image.responsiveImage} />
+            <Image
+              src={article.image.responsiveImage.src}
+              alt={article.image.responsiveImage.alt ?? article.title}
+              width={article.image.responsiveImage.width}
+              height={article.image.responsiveImage.height}
+              sizes={article.image.responsiveImage.sizes}
+            />
           </div>
         )}
 
