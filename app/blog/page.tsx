@@ -1,4 +1,4 @@
-// pages/blog/index.tsx
+// app/blog/page.tsx
 import { client } from '@/lib/datocms';
 import { ALL_ARTICLES_QUERY } from '@/lib/queries';
 import TopStrip from '@/components/TopStrip';
@@ -12,7 +12,12 @@ import type { Article } from '@/lib/types';
 // We only need a subset of Article fields for the listing
 interface ArticleListItem extends Pick<Article, 'title' | 'slug' | 'lecture' | 'image'> {}
 
-export default function BlogIndex({ articles }: { articles: ArticleListItem[] }) {
+export const revalidate = 60;
+
+export default async function BlogIndex() {
+  const { allArticles } = await client.request(ALL_ARTICLES_QUERY);
+  const articles: ArticleListItem[] = allArticles;
+
   return (
     <>
       <Seo tags={[]} titleFallback="Blog – MinuteZen" />
@@ -53,12 +58,4 @@ export default function BlogIndex({ articles }: { articles: ArticleListItem[] })
       <Footer />
     </>
   );
-}
-
-export async function getStaticProps() {
-  const { allArticles } = await client.request(ALL_ARTICLES_QUERY);
-  return {
-    props: { articles: allArticles },
-    revalidate: 60,
-  };
 }

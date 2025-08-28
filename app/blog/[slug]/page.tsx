@@ -1,4 +1,4 @@
-// pages/blog/[slug].tsx
+// app/blog/[slug]/page.tsx
 import { client } from '@/lib/datocms';
 import { ARTICLE_BY_SLUG_QUERY, ARTICLE_SLUGS_QUERY } from '@/lib/queries';
 import Seo from '@/components/Seo';
@@ -6,8 +6,19 @@ import ArticleContent from '@/components/ArticleContent';
 import AuthorBio from '@/components/AuthorBio';
 import Image from 'next/image';
 import type { Article } from '@/lib/types';
+import { notFound } from 'next/navigation';
 
-export default function ArticlePage({ article }: { article: Article }) {
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const data = await client.request(ARTICLE_SLUGS_QUERY);
+  return data.allArticles.map((a: { slug: string }) => ({ slug: a.slug }));
+}
+
+export default async function ArticlePage({ params }: { params: { slug: string } }) {
+  const { article } = await client.request(ARTICLE_BY_SLUG_QUERY, { slug: params.slug });
+  if (!article) notFound();
+
   return (
     <>
       <Seo tags={article.seo} titleFallback={article.title} />
@@ -56,21 +67,4 @@ export default function ArticlePage({ article }: { article: Article }) {
       </main>
     </>
   );
-}
-
-export async function getStaticPaths() {
-  const data = await client.request(ARTICLE_SLUGS_QUERY);
-  return {
-    paths: data.allArticles.map((a: { slug: string }) => ({ params: { slug: a.slug } })),
-    fallback: 'blocking',
-  };
-}
-
-export async function getStaticProps({ params }: { params: { slug: string } }) {
-  const { article } = await client.request(ARTICLE_BY_SLUG_QUERY, { slug: params.slug });
-  if (!article) return { notFound: true };
-  return {
-    props: { article },
-    revalidate: 60, // ISR
-  };
 }
