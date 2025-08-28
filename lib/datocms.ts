@@ -28,6 +28,7 @@ export async function datoRequest<T = any>(
       'X-Exclude-Invalid': 'true',
       ...(process.env.DATOCMS_INCLUDE_DRAFTS === 'true' ? { 'X-Include-Drafts': 'true' } : {}),
     },
+    body: JSON.stringify({ query, variables }),
     // en debug, évite le cache build-time
     cache: 'no-store',
     // si tu utilises l'Edge runtime, commente le suivant
