@@ -91,7 +91,8 @@ export async function getAllArticles(): Promise<Pick<Article, 'title' | 'slug' |
       ALL_ARTICLES_QUERY,
       { first: PAGE_SIZE, skip }
     );
-    all.push(...allArticles);
+    // Filter out entries without a valid slug to avoid broken links
+    all.push(...allArticles.filter((a) => a.slug));
     if (allArticles.length < PAGE_SIZE) {
       break;
     }

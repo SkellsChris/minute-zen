@@ -12,7 +12,9 @@ export const revalidate = 60;
 
 export async function generateStaticParams() {
   const data = await client.request(ARTICLE_SLUGS_QUERY);
-  return data.allArticles.map((a: { slug: string }) => ({ slug: a.slug }));
+  return data.allArticles
+    .filter((a: { slug?: string | null }) => a.slug)
+    .map((a: { slug: string }) => ({ slug: a.slug }));
 }
 
 export default async function ArticlePage({ params }: { params: { slug: string } }) {
