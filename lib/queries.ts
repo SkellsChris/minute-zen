@@ -67,8 +67,8 @@ export const ARTICLE_BY_SLUG_QUERY = /* GraphQL */ `
 `;
 
 export const ALL_ARTICLES_QUERY = /* GraphQL */ `
-  {
-    allArticles(orderBy: _firstPublishedAt_DESC) {
+  query AllArticles($first: IntType, $skip: IntType) {
+    allArticles(first: $first, skip: $skip, orderBy: _firstPublishedAt_DESC) {
       title
       slug
       lecture

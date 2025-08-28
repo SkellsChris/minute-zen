@@ -1,6 +1,5 @@
 // app/blog/page.tsx
-import { client } from '@/lib/datocms';
-import { ALL_ARTICLES_QUERY } from '@/lib/queries';
+import { getAllArticles } from '@/lib/datocms';
 import TopStrip from '@/components/TopStrip';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -15,8 +14,7 @@ interface ArticleListItem extends Pick<Article, 'title' | 'slug' | 'lecture' | '
 export const revalidate = 60;
 
 export default async function BlogIndex() {
-  const { allArticles } = await client.request(ALL_ARTICLES_QUERY);
-  const articles: ArticleListItem[] = allArticles;
+  const articles: ArticleListItem[] = await getAllArticles();
 
   return (
     <>
