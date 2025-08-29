@@ -1,5 +1,7 @@
 // lib/datocms.ts
 import 'server-only';
+import type { Article } from './types';
+import { ALL_ARTICLES_QUERY } from './queries';
 
 const endpoint = process.env.DATOCMS_GRAPHQL_ENDPOINT ?? 'https://graphql.datocms.com/';
 const token = process.env.DATOCMS_API_TOKEN;
@@ -51,4 +53,9 @@ export async function datoRequest<T>(
   }
 
   return json.data as T;
+}
+
+export async function getAllArticles(): Promise<Article[]> {
+  const { allArticles } = await datoRequest<{ allArticles: Article[] }>(ALL_ARTICLES_QUERY);
+  return allArticles;
 }
