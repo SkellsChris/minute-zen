@@ -14,7 +14,12 @@ interface ArticleListItem extends Pick<Article, 'title' | 'slug' | 'lecture' | '
 export const revalidate = 60;
 
 export default async function BlogIndex() {
-  const articles: ArticleListItem[] = await getAllArticles();
+  let articles: ArticleListItem[] = [];
+  try {
+    articles = await getAllArticles();
+  } catch (e) {
+    console.error('getAllArticles error', e);
+  }
 
   return (
     <>
