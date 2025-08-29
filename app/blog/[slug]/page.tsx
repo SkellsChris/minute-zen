@@ -23,11 +23,16 @@ export async function generateStaticParams() {
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  // Ne pas transformer une erreur en 404 : on laisse remonter pour logs clairs
-  const { article } = await datoRequest<{ article: any }>(
-    ARTICLE_BY_SLUG,
-    { slug: params.slug, locale: LOCALE }
-  );
+  let article: any = null;
+  try {
+    ({ article } = await datoRequest<{ article: any }>(
+      ARTICLE_BY_SLUG,
+      { slug: params.slug, locale: LOCALE }
+    ));
+  } catch (e) {
+    console.error('ARTICLE_BY_SLUG error', e);
+    notFound();
+  }
 
   if (!article) {
     console.error('Article introuvable', { slug: params.slug, localeTried: LOCALE });
