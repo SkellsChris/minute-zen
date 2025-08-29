@@ -2,6 +2,14 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { datoRequest } from '@/lib/datocms';
 import { ALL_SLUGS, ARTICLE_BY_SLUG } from '@/lib/queries';
+import type { Article } from '@/lib/types';
+import TopStrip from '@/components/TopStrip';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import Seo from '@/components/Seo';
+import ArticleContent from '@/components/ArticleContent';
+import AuthorBio from '@/components/AuthorBio';
+import FaqBlock from '@/components/FaqBlock';
 
 export const runtime = 'nodejs';
 export const revalidate = 60;
@@ -43,10 +51,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  let article: any;
+  let article: Article | null = null;
 
   try {
-    ({ article } = await datoRequest<{ article: any }>(
+    ({ article } = await datoRequest<{ article: Article }>(
       ARTICLE_BY_SLUG,
       { slug: params.slug, locale: LOCALE }
     ));
@@ -64,18 +72,29 @@ export default async function Page({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <main className="prose mx-auto">
-      <h1>{article.title}</h1>
-      {article.image?.responsiveImage && (
-        <Image
-          src={article.image.responsiveImage.src}
-          alt={article.image.responsiveImage.alt ?? article.title}
-          width={article.image.responsiveImage.width}
-          height={article.image.responsiveImage.height}
-          sizes={article.image.responsiveImage.sizes}
-        />
-      )}
-      {/* StructuredText ici si besoin */}
-    </main>
+    <>
+      <Seo tags={article.seo} titleFallback={article.title} />
+      <TopStrip />
+      <Header />
+      <main className="mx-auto max-w-3xl px-4 py-16">
+        <h1 className="mb-6 text-3xl font-bold">{article.title}</h1>
+        {article.image?.responsiveImage && (
+          <Image
+            src={article.image.responsiveImage.src}
+            alt={article.image.responsiveImage.alt ?? article.title}
+            width={article.image.responsiveImage.width}
+            height={article.image.responsiveImage.height}
+            sizes={article.image.responsiveImage.sizes}
+            className="mb-8 w-full"
+          />
+        )}
+        <ArticleContent article={article} />
+        {article.auteur && <AuthorBio author={article.auteur} />}
+        {article.faq?.map(f => (
+          <FaqBlock key={f.id} item={f} />
+        ))}
+      </main>
+      <Footer />
+    </>
   );
 }
