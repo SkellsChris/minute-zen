@@ -60,7 +60,12 @@ export async function datoRequest<T>(
   return json.data as T;
 }
 
-export async function getAllArticles(): Promise<Article[]> {
-  const { allArticles } = await datoRequest<{ allArticles: Article[] }>(ALL_ARTICLES_QUERY);
+export async function getAllArticles(
+  locale: string = process.env.DEFAULT_LOCALE || 'fr'
+): Promise<Article[]> {
+  const { allArticles } = await datoRequest<{ allArticles: Article[] }>(
+    ALL_ARTICLES_QUERY,
+    { locale }
+  );
   return allArticles;
 }
