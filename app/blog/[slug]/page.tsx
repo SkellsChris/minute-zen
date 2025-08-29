@@ -8,8 +8,13 @@ export const runtime = 'nodejs'; // évite les soucis d’ENV en edge
 type Slug = { slug: string };
 
 export async function generateStaticParams() {
-  const data = await datoRequest<{ allArticles: Slug[] }>(ALL_SLUGS);
-  return data.allArticles.map(a => ({ slug: a.slug }));
+  try {
+    const data = await datoRequest<{ allArticles: Slug[] }>(ALL_SLUGS);
+    return data.allArticles.map(a => ({ slug: a.slug }));
+  } catch (e) {
+    console.error('generateStaticParams error', e);
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
@@ -28,7 +33,14 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  const { article } = await datoRequest<{ article: any }>(ARTICLE_BY_SLUG, { slug: params.slug });
+  let article: any;
+  try {
+    ({ article } = await datoRequest<{ article: any }>(ARTICLE_BY_SLUG, { slug: params.slug }));
+  } catch (e) {
+    console.error('article fetch error', e);
+    notFound();
+  }
+
   if (!article) notFound();
 
   return (
