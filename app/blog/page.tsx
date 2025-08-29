@@ -48,7 +48,7 @@ export default async function BlogIndex() {
               )}
               <div className="p-6">
                 <h2 className="text-xl font-semibold">
-                  <Link href={`/blog/${article.slug}`} className="hover:underline">
+                  <Link href={`/blog/${article.slug}`} prefetch className="hover:underline">
                     {article.title}
                   </Link>
                 </h2>
