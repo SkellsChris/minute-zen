@@ -17,6 +17,7 @@ export async function datoRequest<T>(
 
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
+    Accept: 'application/json',
     Authorization: `Bearer ${token}`,
     'X-Exclude-Invalid': 'true', // évite les records invalides
   };
@@ -37,8 +38,12 @@ export async function datoRequest<T>(
   try {
     json = JSON.parse(text);
   } catch {
-    console.error('DatoCMS non-JSON response:', { status: res.status, text });
-    throw new Error(`DatoCMS response not JSON (status ${res.status}).`);
+    console.error('DatoCMS non-JSON response:', {
+      status: res.status,
+      statusText: res.statusText,
+      text,
+    });
+    throw new Error(`DatoCMS response not JSON (status ${res.status} ${res.statusText}).`);
   }
 
   if (!res.ok || json.errors) {
