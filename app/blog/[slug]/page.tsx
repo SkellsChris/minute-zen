@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import Image from 'next/image';
 import { datoRequest } from '@/lib/datocms';
 import { ALL_SLUGS, ARTICLE_BY_SLUG } from '@/lib/queries';
 
@@ -6,7 +7,7 @@ export const runtime = 'nodejs';
 export const revalidate = 60;
 // Laisse dynamicParams à true (par défaut). Ne PAS mettre dynamicParams = false.
 
-const LOCALE = process.env.DEFAULT_LOCALE ?? 'fr';
+const LOCALE = process.env.DEFAULT_LOCALE || 'fr';
 
 type Slug = { slug: string };
 
@@ -65,7 +66,15 @@ export default async function Page({ params }: { params: { slug: string } }) {
   return (
     <main className="prose mx-auto">
       <h1>{article.title}</h1>
-      {article.image?.url && <img src={article.image.url} alt={article.image.alt ?? ''} />}
+      {article.image?.responsiveImage && (
+        <Image
+          src={article.image.responsiveImage.src}
+          alt={article.image.responsiveImage.alt ?? article.title}
+          width={article.image.responsiveImage.width}
+          height={article.image.responsiveImage.height}
+          sizes={article.image.responsiveImage.sizes}
+        />
+      )}
       {/* StructuredText ici si besoin */}
     </main>
   );
