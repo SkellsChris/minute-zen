@@ -50,9 +50,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
       { slug: params.slug, locale: LOCALE }
     ));
   } catch (e) {
-    // NE PAS transformer l'erreur en 404: on log et on relance pour voir l'erreur réelle en logs
+    // En cas d'erreur de récupération (ex. DatoCMS indisponible),
+    // on journalise l'erreur mais on renvoie une 404 pour éviter
+    // de faire tomber l'application avec une 500.
     console.error('article fetch error', e);
-    throw e;
+    notFound();
   }
 
   if (!article) {
