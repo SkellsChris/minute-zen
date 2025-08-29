@@ -1,6 +1,3 @@
-// lib/queries.ts
-
-// ✅ Slugs avec locale + ordre + limite
 export const ALL_SLUGS = /* GraphQL */ `
   query AllSlugs($locale: SiteLocale) {
     allArticles(first: 200, orderBy: _firstPublishedAt_DESC, locale: $locale) {
@@ -9,18 +6,13 @@ export const ALL_SLUGS = /* GraphQL */ `
   }
 `;
 
-// ✅ Détail par slug avec locale + fallbackLocales
 export const ARTICLE_BY_SLUG = /* GraphQL */ `
   query ArticleBySlug($slug: String, $locale: SiteLocale) {
     article(filter: { slug: { eq: $slug } }, locale: $locale, fallbackLocales: all) {
       title
       slug
       lecture
-      seo: _seoMetaTags {
-        attributes
-        content
-        tag
-      }
+      seo: _seoMetaTags { attributes content tag }
       image {
         responsiveImage(imgixParams: { auto: format, fit: crop, w: 1200 }) {
           src
@@ -62,7 +54,6 @@ export const ARTICLE_BY_SLUG = /* GraphQL */ `
   }
 `;
 
-// ✅ Listing cartes (si tu l’utilises) avec locale + ordre
 export const ALL_ARTICLES_QUERY = /* GraphQL */ `
   query AllArticles($first: IntType, $skip: IntType, $locale: SiteLocale) {
     allArticles(first: $first, skip: $skip, orderBy: _firstPublishedAt_DESC, locale: $locale) {
