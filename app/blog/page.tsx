@@ -13,10 +13,12 @@ interface ArticleListItem extends Pick<Article, 'title' | 'slug' | 'lecture' | '
 
 export const revalidate = 60;
 
+const LOCALE = process.env.DEFAULT_LOCALE || 'fr';
+
 export default async function BlogIndex() {
   let articles: ArticleListItem[] = [];
   try {
-    articles = await getAllArticles();
+    articles = await getAllArticles(LOCALE);
   } catch (e) {
     console.error('getAllArticles error', e);
   }
