@@ -87,3 +87,7 @@ export const ALL_ARTICLES_QUERY = /* GraphQL */ `
     }
   }
 `;
+
+// Alias exports to match the names used throughout the app
+export const ALL_SLUGS = ARTICLE_SLUGS_QUERY;
+export const ARTICLE_BY_SLUG = ARTICLE_BY_SLUG_QUERY;
