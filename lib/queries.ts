@@ -1,15 +1,18 @@
 // lib/queries.ts
-export const ARTICLE_SLUGS_QUERY = /* GraphQL */ `
-  query AllArticleSlugs($locale: SiteLocale) {
-    allArticles(locale: $locale) {
+
+// ✅ Slugs avec locale + ordre + limite
+export const ALL_SLUGS = /* GraphQL */ `
+  query AllSlugs($locale: SiteLocale) {
+    allArticles(first: 200, orderBy: _firstPublishedAt_DESC, locale: $locale) {
       slug
     }
   }
 `;
 
-export const ARTICLE_BY_SLUG_QUERY = /* GraphQL */ `
+// ✅ Détail par slug avec locale + fallbackLocales
+export const ARTICLE_BY_SLUG = /* GraphQL */ `
   query ArticleBySlug($slug: String, $locale: SiteLocale) {
-    article(filter: { slug: { eq: $slug } }, locale: $locale) {
+    article(filter: { slug: { eq: $slug } }, locale: $locale, fallbackLocales: all) {
       title
       slug
       lecture
@@ -33,10 +36,7 @@ export const ARTICLE_BY_SLUG_QUERY = /* GraphQL */ `
       auteur {
         name
         jobTitle
-        avatar {
-          url
-          alt
-        }
+        avatar { url alt }
         bio
       }
       content {
@@ -46,9 +46,7 @@ export const ARTICLE_BY_SLUG_QUERY = /* GraphQL */ `
           ... on FaqRecord {
             id
             question
-            reponse {
-              value
-            }
+            reponse { value }
           }
         }
       }
@@ -57,15 +55,14 @@ export const ARTICLE_BY_SLUG_QUERY = /* GraphQL */ `
         ... on FaqRecord {
           id
           question
-          reponse {
-            value
-          }
+          reponse { value }
         }
       }
     }
   }
 `;
 
+// ✅ Listing cartes (si tu l’utilises) avec locale + ordre
 export const ALL_ARTICLES_QUERY = /* GraphQL */ `
   query AllArticles($first: IntType, $skip: IntType, $locale: SiteLocale) {
     allArticles(first: $first, skip: $skip, orderBy: _firstPublishedAt_DESC, locale: $locale) {
@@ -87,7 +84,3 @@ export const ALL_ARTICLES_QUERY = /* GraphQL */ `
     }
   }
 `;
-
-// Alias exports to match the names used throughout the app
-export const ALL_SLUGS = ARTICLE_SLUGS_QUERY;
-export const ARTICLE_BY_SLUG = ARTICLE_BY_SLUG_QUERY;
