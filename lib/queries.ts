@@ -1,15 +1,15 @@
 // lib/queries.ts
 export const ARTICLE_SLUGS_QUERY = /* GraphQL */ `
-  {
-    allArticles {
+  query AllArticleSlugs($locale: SiteLocale) {
+    allArticles(locale: $locale) {
       slug
     }
   }
 `;
 
 export const ARTICLE_BY_SLUG_QUERY = /* GraphQL */ `
-  query ArticleBySlug($slug: String) {
-    article(filter: { slug: { eq: $slug } }) {
+  query ArticleBySlug($slug: String, $locale: SiteLocale) {
+    article(filter: { slug: { eq: $slug } }, locale: $locale) {
       title
       slug
       lecture
@@ -67,8 +67,8 @@ export const ARTICLE_BY_SLUG_QUERY = /* GraphQL */ `
 `;
 
 export const ALL_ARTICLES_QUERY = /* GraphQL */ `
-  query AllArticles($first: IntType, $skip: IntType) {
-    allArticles(first: $first, skip: $skip, orderBy: _firstPublishedAt_DESC) {
+  query AllArticles($first: IntType, $skip: IntType, $locale: SiteLocale) {
+    allArticles(first: $first, skip: $skip, orderBy: _firstPublishedAt_DESC, locale: $locale) {
       title
       slug
       lecture
