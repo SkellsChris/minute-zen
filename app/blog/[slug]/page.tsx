@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
+import Header from '@/components/Header';
 import { datoRequest } from '@/lib/datocms';
 import { ALL_SLUGS, ARTICLE_BY_SLUG } from '@/lib/queries';
 
@@ -94,7 +95,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const headings = extractHeadings(article.content);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-white">
+    <>
+      <Header />
+      <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-white">
       {/* Bande décorative douce */}
       <div
         aria-hidden
@@ -234,5 +237,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
         </div>
       </main>
     </div>
+    </>
   );
 }
