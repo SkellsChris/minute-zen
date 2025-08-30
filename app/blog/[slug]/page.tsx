@@ -2,7 +2,7 @@
 import { notFound } from 'next/navigation';
 import { datoRequest } from '@/lib/datocms';
 import { ALL_SLUGS, ARTICLE_BY_SLUG } from '@/lib/queries';
-import { StructuredText } from 'react-datocms/structured-text';
+import { StructuredText } from 'react-datocms';
 
 export const runtime = 'nodejs';
 export const revalidate = 60;
