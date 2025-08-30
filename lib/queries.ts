@@ -11,6 +11,7 @@ export const ALL_SLUGS = /* GraphQL */ `
 
 // Article par slug — noms alignés à tes modèles/blocs
 // Détail article : version sûre (pas de blocks ni faq pour l’instant)
+// lib/queries.ts
 export const ARTICLE_BY_SLUG = /* GraphQL */ `
   query ArticleBySlug($slug: String!, $locale: SiteLocale!) {
     article(filter: { slug: { eq: $slug } }, locale: $locale) {
@@ -18,31 +19,35 @@ export const ARTICLE_BY_SLUG = /* GraphQL */ `
       title
       slug
       lecture
-
       image {
         responsiveImage(imgixParams: { auto: format, fit: crop, w: 1200 }) {
-          src
-          srcSet
-          sizes
-          width
-          height
-          alt
-          title
-          base64
+          src srcSet sizes width height alt title base64
         }
       }
-
       auteur {
         nom
         imageauteur { url alt title }
         bio
       }
-
-      # Structured Text sans blocks (on réactivera après)
       content {
         value
+        blocks {
+          __typename
+          ... on FaqdetailRecord {
+            id
+            question
+            reponse { value }
+          }
+        }
       }
-
+      faq {
+        __typename
+        ... on FaqdetailRecord {
+          id
+          question
+          reponse { value }
+        }
+      }
       _seoMetaTags { tag attributes content }
     }
   }
