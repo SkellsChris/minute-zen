@@ -1,6 +1,5 @@
 // lib/queries.ts
 
-// Slugs pour SSG
 export const ALL_SLUGS = /* GraphQL */ `
   query AllSlugs($locale: SiteLocale) {
     allArticles(first: 200, orderBy: _firstPublishedAt_DESC, locale: $locale) {
@@ -9,9 +8,6 @@ export const ALL_SLUGS = /* GraphQL */ `
   }
 `;
 
-// Article par slug — noms alignés à tes modèles/blocs
-// Détail article : version sûre (pas de blocks ni faq pour l’instant)
-// lib/queries.ts
 export const ARTICLE_BY_SLUG = /* GraphQL */ `
   query ArticleBySlug($slug: String!, $locale: SiteLocale!) {
     article(filter: { slug: { eq: $slug } }, locale: $locale) {
@@ -19,42 +15,37 @@ export const ARTICLE_BY_SLUG = /* GraphQL */ `
       title
       slug
       lecture
+
       image {
         responsiveImage(imgixParams: { auto: format, fit: crop, w: 1200 }) {
-          src srcSet sizes width height alt title base64
+          src
+          srcSet
+          sizes
+          width
+          height
+          alt
+          title
+          base64
         }
       }
+
       auteur {
         nom
         imageauteur { url alt title }
         bio
       }
+
+      # Structured Text SANS blocks pour le moment (on réactive après)
       content {
         value
-        blocks {
-          __typename
-          ... on FaqdetailRecord {
-            id
-            question
-            reponse { value }
-          }
-        }
       }
-      faq {
-        __typename
-        ... on FaqdetailRecord {
-          id
-          question
-          reponse { value }
-        }
-      }
-      _seoMetaTags { tag attributes content }
+
+      # IMPORTANT: pas d'alias "seo: _seoMetaTags" (risque de conflit avec le champ "seo")
+      seoMeta: _seoMetaTags { tag attributes content }
     }
   }
 `;
 
-
-// Liste pour /blog
 export const ALL_ARTICLES_QUERY = /* GraphQL */ `
   query AllArticles($first: IntType, $skip: IntType, $locale: SiteLocale) {
     allArticles(first: $first, skip: $skip, orderBy: _firstPublishedAt_DESC, locale: $locale) {
