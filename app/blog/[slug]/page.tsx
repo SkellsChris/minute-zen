@@ -150,7 +150,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
               src={rimg.src}
               alt={rimg.alt ?? ''}
               width={rimg.width}
-              height={rimg.height}
+              height={rimg.height / 2}
               sizes="(max-width: 768px) 100vw, 768px"
               className="h-auto w-full"
             />
