@@ -37,27 +37,24 @@ export const ARTICLE_BY_SLUG = /* GraphQL */ `
         bio
       }
 
-      # Contenu principal (on garde la version simple qui marche)
       content {
         value
-        # Si un jour tu utilises des blocks dans le Structured Text :
         blocks {
           __typename
           ... on FaqdetailsRecord {
             id
             question
-            response { value }
+            reponse { value }   # ← corrige ici
           }
         }
       }
 
-      # FAQ séparée (Modular Content) : bloc 'faqdetails'
       faq {
         __typename
         ... on FaqdetailsRecord {
           id
           question
-          response { value }
+          reponse { value }     # ← et ici
         }
       }
 
@@ -65,6 +62,7 @@ export const ARTICLE_BY_SLUG = /* GraphQL */ `
     }
   }
 `;
+
 
 
 export const ALL_ARTICLES_QUERY = /* GraphQL */ `
