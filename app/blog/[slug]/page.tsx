@@ -1,41 +1,64 @@
-export const dynamicParams = true;
-export const dynamic = 'force-dynamic';
-console.log('[DATOCMS] token prefix =', (process.env.DATOCMS_API_TOKEN ?? 'undefined').slice(0,6));
-
-
+// app/blog/[slug]/page.tsx
+import { notFound } from 'next/navigation';
 import { datoRequest } from '@/lib/datocms';
-import { ARTICLE_BY_SLUG } from '@/lib/queries';
+import { ALL_SLUGS, ARTICLE_BY_SLUG } from '@/lib/queries';
+
+export const runtime = 'nodejs';
+export const revalidate = 60;
+// (facultatif, mais utile si un parent aurait mis dynamicParams = false)
+export const dynamicParams = true;
 
 const LOCALE = process.env.DEFAULT_LOCALE ?? 'fr';
 
+type Slug = { slug: string };
+
+export async function generateStaticParams() {
+  try {
+    const data = await datoRequest<{ allArticles: Slug[] }>(ALL_SLUGS, { locale: LOCALE });
+    return data.allArticles.map(a => ({ slug: a.slug }));
+  } catch (e) {
+    console.error('generateStaticParams error', e);
+    return [];
+  }
+}
+
 export default async function Page({ params }: { params: { slug: string } }) {
-  let data: any = null;
-  let err: any = null;
+  let data: { article: any } | null = null;
 
   try {
-    data = await datoRequest(ARTICLE_BY_SLUG, { slug: params.slug, locale: LOCALE });
-  } catch (e: any) {
-    err = String(e?.message ?? e);
+    data = await datoRequest<{ article: any }>(ARTICLE_BY_SLUG, {
+      slug: params.slug,
+      locale: LOCALE,
+    });
+  } catch (e) {
+    console.error('ARTICLE_BY_SLUG error', e);
+    return notFound();
   }
 
-  const article = data?.article ?? null;
+  const article = data?.article;
+  if (!article) return notFound();
 
-  // 🔎 Affiche tout en clair pour comprendre ce qui revient
-  if (!article || err) {
-    return (
-      <pre style={{ padding: 24, whiteSpace: 'pre-wrap' }}>
-        {'DEBUG /blog/[slug]\n'}
-        {'slug: '}{params.slug}{'\n'}
-        {'locale: '}{LOCALE}{'\n\n'}
-        {'error: '}{err ?? 'none'}{'\n\n'}
-        {`raw data: ${JSON.stringify(data, null, 2)}`}
-      </pre>
-    );
-  }
+  const rimg = article.image?.responsiveImage;
 
   return (
-    <main className="prose mx-auto">
+    <main className="prose mx-auto px-4 py-12">
       <h1>{article.title}</h1>
+
+      {article.auteur?.nom && (
+        <p className="mt-0 text-sm text-slate-600">par {article.auteur.nom}</p>
+      )}
+
+      {rimg?.src && (
+        <img
+          src={rimg.src}
+          alt={rimg.alt ?? ''}
+          width={rimg.width}
+          height={rimg.height}
+        />
+      )}
+
+      {/* TODO: rendre le Structured Text si besoin */}
+      {/* article.content?.value ... */}
     </main>
   );
 }
