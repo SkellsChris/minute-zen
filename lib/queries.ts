@@ -37,24 +37,18 @@ export const ARTICLE_BY_SLUG = /* GraphQL */ `
         bio
       }
 
+      # Contenu principal (sans blocks pour le moment)
       content {
         value
-        blocks {
-          __typename
-          ... on FaqdetailsRecord {
-            id
-            question
-            reponse { value }   # ← corrige ici
-          }
-        }
       }
 
+      # FAQ (block 'faqdetails' avec question + reponse)
       faq {
         __typename
         ... on FaqdetailsRecord {
           id
           question
-          reponse { value }     # ← et ici
+          reponse { value }
         }
       }
 
@@ -62,7 +56,6 @@ export const ARTICLE_BY_SLUG = /* GraphQL */ `
     }
   }
 `;
-
 
 
 export const ALL_ARTICLES_QUERY = /* GraphQL */ `
