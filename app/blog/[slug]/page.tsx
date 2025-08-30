@@ -2,7 +2,7 @@
 import { notFound } from 'next/navigation';
 import { datoRequest } from '@/lib/datocms';
 import { ALL_SLUGS, ARTICLE_BY_SLUG } from '@/lib/queries';
-import { StructuredText } from 'react-datocms/structured-text';
+import StructuredText from '@/components/StructuredText';
 export const runtime = 'nodejs';
 export const revalidate = 60;
 // Utile si un parent a mis dynamicParams = false
