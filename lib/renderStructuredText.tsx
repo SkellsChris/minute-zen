@@ -37,8 +37,19 @@ function renderNode(
           {node.children?.map((n: any, i: number) => renderNode(n, i, options))}
         </a>
       );
-    case 'span':
-      return node.value;
+    case 'span': {
+      let content: React.ReactNode = node.value;
+      if (node.marks) {
+        node.marks.forEach((mark: string) => {
+          if (mark === 'strong') {
+            content = <strong>{content}</strong>;
+          } else if (mark === 'em') {
+            content = <em>{content}</em>;
+          }
+        });
+      }
+      return <Fragment key={index}>{content}</Fragment>;
+    }
     case 'block': {
       const block = options.blocks?.find((b: any) => b.id === node.id);
       if (block && options.renderBlock) {
