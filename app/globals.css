@@ -11,3 +11,8 @@
 body {
   @apply antialiased text-gray-800 bg-white;
 }
+
+img {
+  height: 300px;
+  width: auto;
+}
