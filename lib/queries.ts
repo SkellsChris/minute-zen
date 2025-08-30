@@ -1,6 +1,6 @@
 // lib/queries.ts
 
-// Liste des slugs pour SSG
+// Slugs pour SSG
 export const ALL_SLUGS = /* GraphQL */ `
   query AllSlugs($locale: SiteLocale) {
     allArticles(first: 200, orderBy: _firstPublishedAt_DESC, locale: $locale) {
@@ -9,7 +9,7 @@ export const ALL_SLUGS = /* GraphQL */ `
   }
 `;
 
-// Détail d’un article par slug (schéma aligné à tes models/blocks)
+// Article par slug — noms alignés à tes modèles/blocs
 export const ARTICLE_BY_SLUG = /* GraphQL */ `
   query ArticleBySlug($slug: String!, $locale: SiteLocale!) {
     article(filter: { slug: { eq: $slug } }, locale: $locale) {
@@ -63,7 +63,7 @@ export const ARTICLE_BY_SLUG = /* GraphQL */ `
   }
 `;
 
-// Liste pour la page /blog (titre, slug, image, lecture)
+// Liste pour /blog
 export const ALL_ARTICLES_QUERY = /* GraphQL */ `
   query AllArticles($first: IntType, $skip: IntType, $locale: SiteLocale) {
     allArticles(first: $first, skip: $skip, orderBy: _firstPublishedAt_DESC, locale: $locale) {
