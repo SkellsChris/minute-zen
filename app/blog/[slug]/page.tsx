@@ -1,5 +1,7 @@
 export const dynamicParams = true;
 export const dynamic = 'force-dynamic';
+console.log('[DATOCMS] token prefix =', (process.env.DATOCMS_API_TOKEN ?? 'undefined').slice(0,6));
+
 
 import { datoRequest } from '@/lib/datocms';
 import { ARTICLE_BY_SLUG } from '@/lib/queries';
