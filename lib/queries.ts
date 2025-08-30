@@ -8,6 +8,8 @@ export const ALL_SLUGS = /* GraphQL */ `
   }
 `;
 
+// lib/queries.ts (ne change pas ALL_SLUGS / ALL_ARTICLES_QUERY)
+
 export const ARTICLE_BY_SLUG = /* GraphQL */ `
   query ArticleBySlug($slug: String!, $locale: SiteLocale!) {
     article(filter: { slug: { eq: $slug } }, locale: $locale) {
@@ -29,23 +31,41 @@ export const ARTICLE_BY_SLUG = /* GraphQL */ `
         }
       }
 
-
       auteur {
         nom
         imageauteur { url alt title }
         bio
       }
 
-      # Structured Text SANS blocks pour le moment (on réactive après)
+      # Contenu principal (on garde la version simple qui marche)
       content {
         value
+        # Si un jour tu utilises des blocks dans le Structured Text :
+        blocks {
+          __typename
+          ... on FaqdetailsRecord {
+            id
+            question
+            response { value }
+          }
+        }
       }
 
-      # IMPORTANT: pas d'alias "seo: _seoMetaTags" (risque de conflit avec le champ "seo")
+      # FAQ séparée (Modular Content) : bloc 'faqdetails'
+      faq {
+        __typename
+        ... on FaqdetailsRecord {
+          id
+          question
+          response { value }
+        }
+      }
+
       seoMeta: _seoMetaTags { tag attributes content }
     }
   }
 `;
+
 
 export const ALL_ARTICLES_QUERY = /* GraphQL */ `
   query AllArticles($first: IntType, $skip: IntType, $locale: SiteLocale) {
