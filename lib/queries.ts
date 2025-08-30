@@ -6,53 +6,21 @@ export const ALL_SLUGS = /* GraphQL */ `
   }
 `;
 
+// lib/queries.ts
 export const ARTICLE_BY_SLUG = /* GraphQL */ `
-  query ArticleBySlug($slug: String, $locale: SiteLocale) {
-    article(filter: { slug: { eq: $slug } }, locale: $locale, fallbackLocales: all) {
+  query ArticleBySlug($slug: String!, $locale: SiteLocale!) {
+    article(
+      filter: { slug: { eq: $slug } }
+      locale: $locale
+      # ⛔️ on supprime fallbackLocales: all pour le test
+    ) {
+      id
       title
       slug
-      lecture
-      seo: _seoMetaTags { attributes content tag }
-      image {
-        responsiveImage(imgixParams: { auto: format, fit: crop, w: 1200 }) {
-          src
-          srcSet
-          sizes
-          width
-          height
-          alt
-          title
-          base64
-        }
-      }
-      auteur {
-        name
-        jobTitle
-        avatar { url alt }
-        bio
-      }
-      content {
-        value
-        blocks {
-          __typename
-          ... on FaqRecord {
-            id
-            question
-            reponse { value }
-          }
-        }
-      }
-      faq {
-        __typename
-        ... on FaqRecord {
-          id
-          question
-          reponse { value }
-        }
-      }
     }
   }
 `;
+
 
 export const ALL_ARTICLES_QUERY = /* GraphQL */ `
   query AllArticles($first: IntType, $skip: IntType, $locale: SiteLocale) {
