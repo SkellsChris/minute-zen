@@ -2,7 +2,6 @@
 import { notFound } from 'next/navigation';
 import { datoRequest } from '@/lib/datocms';
 import { ALL_SLUGS, ARTICLE_BY_SLUG } from '@/lib/queries';
-import { StructuredText } from 'react-datocms';
 
 export const runtime = 'nodejs';
 export const revalidate = 60;
@@ -16,10 +15,42 @@ export async function generateStaticParams() {
   try {
     const data = await datoRequest<{ allArticles: Slug[] }>(ALL_SLUGS, { locale: LOCALE });
     return data.allArticles.map((a) => ({ slug: a.slug }));
-  } catch (e) {
-    console.error('generateStaticParams error', e);
+  } catch {
     return [];
   }
+}
+
+// --- RENDERER SÛR POUR STRUCTURED TEXT (paragraphe/heading) ---
+function RenderStructured({ data }: { data: any }) {
+  const doc = data?.value?.document;
+  if (!doc?.children) return null;
+
+  return (
+    <>
+      {doc.children.map((node: any, i: number) => {
+        const text =
+          (node.children ?? [])
+            .map((c: any) => c?.value ?? '')
+            .join('')
+            .trim();
+
+        if (!text) return null;
+
+        if (node.type === 'heading') {
+          const level = Math.min(node.level ?? 2, 6);
+          const Tag = (`h${level}` as unknown) as keyof JSX.IntrinsicElements;
+          return <Tag key={i}>{text}</Tag>;
+        }
+
+        if (node.type === 'paragraph') {
+          return <p key={i}>{text}</p>;
+        }
+
+        // autres types ignorés pour l’instant
+        return null;
+      })}
+    </>
+  );
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
@@ -45,12 +76,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
     <main className="prose mx-auto px-4 py-12">
       <h1 className="mb-2">{article.title}</h1>
 
-      {/* lecture (optionnel) */}
       {typeof article.lecture === 'number' && (
         <p className="mt-0 text-sm text-slate-600">{article.lecture} min de lecture</p>
       )}
 
-      {/* Bloc auteur : avatar + nom + bio */}
+      {/* Auteur */}
       {auteur && (
         <aside className="not-prose my-6 flex items-start gap-4 rounded-xl border border-slate-200 p-4">
           {auteur.imageauteur?.url && (
@@ -81,10 +111,10 @@ export default async function Page({ params }: { params: { slug: string } }) {
         />
       )}
 
-      {/* Contenu principal (Structured Text) */}
+      {/* Contenu de l’article */}
       {article.content?.value && (
         <div className="prose max-w-none mt-8">
-          <StructuredText data={article.content} />
+          <RenderStructured data={article.content} />
         </div>
       )}
     </main>
