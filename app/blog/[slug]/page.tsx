@@ -1,6 +1,9 @@
 import { notFound } from 'next/navigation';
 import { datoRequest } from '@/lib/datocms';
 import { ALL_SLUGS, ARTICLE_BY_SLUG } from '@/lib/queries';
+export const dynamicParams = true;       // force l’override
+export const dynamic = 'force-dynamic';  // bypasse la statique/ISR pour tester
+// export const revalidate = 0;          // optionnel pour le test
 
 export const runtime = 'nodejs';
 export const revalidate = 60;
