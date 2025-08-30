@@ -10,6 +10,7 @@ export const ALL_SLUGS = /* GraphQL */ `
 `;
 
 // Article par slug — noms alignés à tes modèles/blocs
+// Détail article : version sûre (pas de blocks ni faq pour l’instant)
 export const ARTICLE_BY_SLUG = /* GraphQL */ `
   query ArticleBySlug($slug: String!, $locale: SiteLocale!) {
     article(filter: { slug: { eq: $slug } }, locale: $locale) {
@@ -37,31 +38,16 @@ export const ARTICLE_BY_SLUG = /* GraphQL */ `
         bio
       }
 
+      # Structured Text sans blocks (on réactivera après)
       content {
         value
-        blocks {
-          __typename
-          ... on FaqdetailRecord {
-            id
-            question
-            reponse { value }
-          }
-        }
-      }
-
-      faq {
-        __typename
-        ... on FaqdetailRecord {
-          id
-          question
-          reponse { value }
-        }
       }
 
       _seoMetaTags { tag attributes content }
     }
   }
 `;
+
 
 // Liste pour /blog
 export const ALL_ARTICLES_QUERY = /* GraphQL */ `
