@@ -5,7 +5,7 @@ import { ALL_SLUGS, ARTICLE_BY_SLUG } from '@/lib/queries';
 
 export const runtime = 'nodejs';
 export const revalidate = 60;
-// (facultatif, mais utile si un parent aurait mis dynamicParams = false)
+// Utile si un parent a mis dynamicParams = false
 export const dynamicParams = true;
 
 const LOCALE = process.env.DEFAULT_LOCALE ?? 'fr';
@@ -45,7 +45,19 @@ export default async function Page({ params }: { params: { slug: string } }) {
       <h1>{article.title}</h1>
 
       {article.auteur?.nom && (
-        <p className="mt-0 text-sm text-slate-600">par {article.auteur.nom}</p>
+        <p className="mt-0 text-sm text-slate-600">
+          par {article.auteur.nom}
+        </p>
+      )}
+
+      {article.auteur?.imageauteur?.url && (
+        <img
+          src={article.auteur.imageauteur.url}
+          alt={article.auteur.imageauteur.alt ?? ''}
+          width={64}
+          height={64}
+          style={{ borderRadius: '9999px' }}
+        />
       )}
 
       {rimg?.src && (
@@ -58,7 +70,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       )}
 
       {/* TODO: rendre le Structured Text si besoin */}
-      {/* article.content?.value ... */}
+      {/* article.content?.value … */}
     </main>
   );
 }
