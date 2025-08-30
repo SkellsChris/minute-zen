@@ -1,54 +1,39 @@
-import { notFound } from 'next/navigation';
-import { datoRequest } from '@/lib/datocms';
-import { ALL_SLUGS, ARTICLE_BY_SLUG } from '@/lib/queries';
-export const dynamicParams = true;       // force l’override
-export const dynamic = 'force-dynamic';  // bypasse la statique/ISR pour tester
-// export const revalidate = 0;          // optionnel pour le test
+export const dynamicParams = true;
+export const dynamic = 'force-dynamic';
 
-export const runtime = 'nodejs';
-export const revalidate = 60;
-// (DIAGNOSTIC possible) : dé-commente 2 lignes suivantes le temps d’un test
-// export const dynamic = 'force-dynamic';
-// export const revalidate = 0;
+import { datoRequest } from '@/lib/datocms';
+import { ARTICLE_BY_SLUG } from '@/lib/queries';
 
 const LOCALE = process.env.DEFAULT_LOCALE ?? 'fr';
 
-type Slug = { slug: string };
-
-export async function generateStaticParams() {
-  try {
-    const data = await datoRequest<{ allArticles: Slug[] }>(ALL_SLUGS, { locale: LOCALE });
-    return data.allArticles.map(a => ({ slug: a.slug }));
-  } catch (e) {
-    console.error('generateStaticParams error', e);
-    return [];
-  }
-}
-
 export default async function Page({ params }: { params: { slug: string } }) {
-  let article: any = null;
+  let data: any = null;
+  let err: any = null;
+
   try {
-    ({ article } = await datoRequest<{ article: any }>(
-      ARTICLE_BY_SLUG,
-      { slug: params.slug, locale: LOCALE }
-    ));
-  } catch (e) {
-    console.error('ARTICLE_BY_SLUG error', e);
-    notFound();
+    data = await datoRequest(ARTICLE_BY_SLUG, { slug: params.slug, locale: LOCALE });
+  } catch (e: any) {
+    err = String(e?.message ?? e);
   }
 
-  if (!article) {
-    console.error('Article introuvable', { slug: params.slug, localeTried: LOCALE });
-    notFound();
+  const article = data?.article ?? null;
+
+  // 🔎 Affiche tout en clair pour comprendre ce qui revient
+  if (!article || err) {
+    return (
+      <pre style={{ padding: 24, whiteSpace: 'pre-wrap' }}>
+        {'DEBUG /blog/[slug]\n'}
+        {'slug: '}{params.slug}{'\n'}
+        {'locale: '}{LOCALE}{'\n\n'}
+        {'error: '}{err ?? 'none'}{'\n\n'}
+        {`raw data: ${JSON.stringify(data, null, 2)}`}
+      </pre>
+    );
   }
 
-  const rimg = article.image?.responsiveImage; // correspond à la query
   return (
     <main className="prose mx-auto">
       <h1>{article.title}</h1>
-      {rimg?.src && (
-        <img src={rimg.src} alt={rimg.alt ?? ''} width={rimg.width} height={rimg.height} />
-      )}
     </main>
   );
 }
