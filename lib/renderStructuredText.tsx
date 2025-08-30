@@ -9,6 +9,21 @@ interface RenderOptions {
   renderBlock?: (block: any) => React.ReactNode;
 }
 
+function slugify(str: string) {
+  return str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
+function getText(node: any): string {
+  if (!node) return '';
+  if (node.type === 'span' && typeof node.value === 'string') return node.value;
+  return (node.children ?? []).map(getText).join('');
+}
+
 function renderNode(
   node: any,
   index: number,
@@ -21,7 +36,12 @@ function renderNode(
       return <p key={index}>{node.children?.map((n: any, i: number) => renderNode(n, i, options))}</p>;
     case 'heading': {
       const Tag = `h${node.level}` as keyof JSX.IntrinsicElements;
-      return <Tag key={index}>{node.children?.map((n: any, i: number) => renderNode(n, i, options))}</Tag>;
+      const id = slugify(getText(node));
+      return (
+        <Tag key={index} id={id}>
+          {node.children?.map((n: any, i: number) => renderNode(n, i, options))}
+        </Tag>
+      );
     }
     case 'list': {
       const ListTag = node.style === 'unordered' ? 'ul' : 'ol';
