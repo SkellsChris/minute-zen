@@ -191,8 +191,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
               <img
                 src={auteur.imageauteur.url}
                 alt={auteur.imageauteur.alt ?? auteur.nom ?? 'Auteur'}
-                width={56}
-                height={56}
                 className="h-14 w-14 rounded-full object-cover ring-2 ring-emerald-100"
               />
             )}
