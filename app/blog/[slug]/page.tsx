@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import { datoRequest } from '@/lib/datocms';
 import { ALL_SLUGS, ARTICLE_BY_SLUG } from '@/lib/queries';
+import { renderStructuredText } from '@/lib/renderStructuredText';
 
 export const runtime = 'nodejs';
 export const revalidate = 60;
@@ -46,33 +47,6 @@ export async function generateStaticParams() {
   }
 }
 
-/** RENDERER minimal Structured Text (headings + paragraphs) */
-function RenderStructured({ data }: { data: any }) {
-  const doc = data?.value?.document;
-  if (!doc?.children) return null;
-
-  return (
-    <>
-      {doc.children.map((node: any, i: number) => {
-        const text = (node.children ?? []).map((c: any) => c?.value ?? '').join('').trim();
-        if (!text) return null;
-
-        if (node.type === 'heading') {
-          const level = Math.min(node.level ?? 2, 6);
-          const Tag = (`h${level}` as unknown) as keyof JSX.IntrinsicElements;
-          const id = slugify(text);
-          return (
-            <Tag key={i} id={id}>
-              {text}
-            </Tag>
-          );
-        }
-        if (node.type === 'paragraph') return <p key={i}>{text}</p>;
-        return null;
-      })}
-    </>
-  );
-}
 
 export default async function Page({ params }: { params: { slug: string } }) {
   let data: { article: any } | null = null;
@@ -161,7 +135,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         {article.content?.value && (
           <div className="md:flex md:gap-8">
             <article className="prose prose-slate prose-lg max-w-none flex-1 prose-a:text-emerald-700 prose-blockquote:border-emerald-200 prose-blockquote:text-slate-700 prose-hr:border-emerald-100">
-              <RenderStructured data={article.content} />
+              {renderStructuredText(article.content.value)}
             </article>
             {headings.length > 0 && (
               <nav className="relative hidden w-56 flex-none md:block">
@@ -202,7 +176,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                     </span>
                   </summary>
                   <div className="prose prose-slate mt-3 max-w-none prose-a:text-emerald-700">
-                    <RenderStructured data={f.reponse} />
+                    {renderStructuredText(f.reponse?.value)}
                   </div>
                 </details>
               ))}
