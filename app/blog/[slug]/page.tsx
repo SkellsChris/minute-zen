@@ -28,12 +28,7 @@ function RenderStructured({ data }: { data: any }) {
   return (
     <>
       {doc.children.map((node: any, i: number) => {
-        const text =
-          (node.children ?? [])
-            .map((c: any) => c?.value ?? '')
-            .join('')
-            .trim();
-
+        const text = (node.children ?? []).map((c: any) => c?.value ?? '').join('').trim();
         if (!text) return null;
 
         if (node.type === 'heading') {
@@ -46,8 +41,7 @@ function RenderStructured({ data }: { data: any }) {
           return <p key={i}>{text}</p>;
         }
 
-        // autres types ignorés pour l’instant
-        return null;
+        return null; // autres types ignorés pour l’instant
       })}
     </>
   );
@@ -116,6 +110,21 @@ export default async function Page({ params }: { params: { slug: string } }) {
         <div className="prose max-w-none mt-8">
           <RenderStructured data={article.content} />
         </div>
+      )}
+
+      {/* FAQ (Modular Content: faqdetails avec question + reponse) */}
+      {Array.isArray(article.faq) && article.faq.length > 0 && (
+        <section className="mt-10">
+          <h2>FAQ</h2>
+          {article.faq.map((f: any) => (
+            <details key={f.id} className="my-4">
+              <summary className="font-semibold">{f.question}</summary>
+              <div className="mt-2">
+                <RenderStructured data={f.reponse} />
+              </div>
+            </details>
+          ))}
+        </section>
       )}
     </main>
   );
