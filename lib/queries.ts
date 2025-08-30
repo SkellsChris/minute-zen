@@ -42,10 +42,10 @@ export const ARTICLE_BY_SLUG = /* GraphQL */ `
         value
       }
 
-      # FAQ (block 'faqdetails' avec question + reponse)
+      # FAQ (block 'faqdetail' avec question + reponse)
       faq {
         __typename
-        ... on FaqdetailsRecord {
+        ... on FaqdetailRecord {
           id
           question
           reponse { value }
