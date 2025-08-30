@@ -2,7 +2,7 @@
 import { notFound } from 'next/navigation';
 import { datoRequest } from '@/lib/datocms';
 import { ALL_SLUGS, ARTICLE_BY_SLUG } from '@/lib/queries';
-
+import { StructuredText } from 'react-datocms/structured-text';
 export const runtime = 'nodejs';
 export const revalidate = 60;
 // Utile si un parent a mis dynamicParams = false
@@ -49,6 +49,12 @@ export default async function Page({ params }: { params: { slug: string } }) {
           par {article.auteur.nom}
         </p>
       )}
+
+      {article.content?.value && (
+  <div className="prose max-w-none mt-8">
+    <StructuredText data={article.content} />
+  </div>
+)}
 
       {article.auteur?.imageauteur?.url && (
         <img
