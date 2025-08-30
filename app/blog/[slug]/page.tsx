@@ -67,14 +67,17 @@ export default async function Page({ params }: { params: { slug: string } }) {
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-white">
       {/* Bande décorative douce */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-64 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(16,185,129,0.18),transparent)]" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-64 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(16,185,129,0.18),transparent)]"
+      />
 
       <main className="mx-auto max-w-3xl px-4 py-10 md:py-14">
         {/* Fil d’Ariane / retour */}
         <div className="mb-6 flex items-center justify-between">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 rounded-full border border-emerald-200/70 bg-white/70 px-3 py-1 text-sm text-emerald-700 hover:bg-white transition"
+            className="inline-flex items-center gap-2 rounded-full border border-emerald-200/70 bg-white/70 px-3 py-1 text-sm text-emerald-700 transition hover:bg-white"
           >
             ← Retour au blog
           </Link>
@@ -92,29 +95,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
             {article.title}
           </span>
         </h1>
-
-        {/* Auteur */}
-        {auteur && (
-          <aside className="not-prose my-6 flex items-start gap-4 rounded-2xl border border-emerald-100 bg-white/70 p-4 shadow-sm">
-            {auteur.imageauteur?.url && (
-              <img
-                src={auteur.imageauteur.url}
-                alt={auteur.imageauteur.alt ?? auteur.nom ?? 'Auteur'}
-                width={56}
-                height={56}
-                className="h-14 w-14 rounded-full object-cover ring-2 ring-emerald-100"
-              />
-            )}
-            <div>
-              {auteur.nom && <p className="m-0 font-medium text-slate-900">par {auteur.nom}</p>}
-              {auteur.bio && (
-                <p className="m-0 mt-1 text-sm text-slate-600 whitespace-pre-line">
-                  {auteur.bio}
-                </p>
-              )}
-            </div>
-          </aside>
-        )}
 
         {/* Image de couverture */}
         {rimg?.src && (
@@ -157,13 +137,33 @@ export default async function Page({ params }: { params: { slug: string } }) {
                     </span>
                   </summary>
                   <div className="prose prose-slate mt-3 max-w-none prose-a:text-emerald-700">
-                    {/* Structured Text de la réponse */}
                     <RenderStructured data={f.reponse} />
                   </div>
                 </details>
               ))}
             </div>
           </section>
+        )}
+
+        {/* Auteur (déplacé après la FAQ) */}
+        {auteur && (
+          <aside className="not-prose mt-10 flex items-start gap-4 rounded-2xl border border-emerald-100 bg-white/70 p-4 shadow-sm">
+            {auteur.imageauteur?.url && (
+              <img
+                src={auteur.imageauteur.url}
+                alt={auteur.imageauteur.alt ?? auteur.nom ?? 'Auteur'}
+                width={56}
+                height={56}
+                className="h-14 w-14 rounded-full object-cover ring-2 ring-emerald-100"
+              />
+            )}
+            <div>
+              {auteur.nom && <p className="m-0 font-medium text-slate-900">par {auteur.nom}</p>}
+              {auteur.bio && (
+                <p className="m-0 mt-1 text-sm text-slate-600 whitespace-pre-line">{auteur.bio}</p>
+              )}
+            </div>
+          </aside>
         )}
 
         {/* Fin */}
