@@ -41,7 +41,7 @@ export default async function BlogIndex() {
                   src={article.image.responsiveImage.src}
                   alt={article.image.responsiveImage.alt ?? article.title}
                   width={article.image.responsiveImage.width}
-                  height={article.image.responsiveImage.height / 2}
+                  height={Math.round(article.image.responsiveImage.height / 2)}
                   sizes={article.image.responsiveImage.sizes}
                   className="w-full"
                 />
