@@ -13,6 +13,29 @@ const LOCALE = process.env.DEFAULT_LOCALE ?? 'fr';
 
 type Slug = { slug: string };
 
+function slugify(str: string) {
+  return str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
+function extractHeadings(data: any) {
+  const doc = data?.value?.document;
+  if (!doc?.children) return [];
+  return doc.children
+    .filter((n: any) => n.type === 'heading' && (n.level ?? 2) === 2)
+    .map((n: any) => {
+      const text = (n.children ?? [])
+        .map((c: any) => c?.value ?? '')
+        .join('')
+        .trim();
+      return { id: slugify(text), text };
+    });
+}
+
 export async function generateStaticParams() {
   try {
     const data = await datoRequest<{ allArticles: Slug[] }>(ALL_SLUGS, { locale: LOCALE });
@@ -36,7 +59,12 @@ function RenderStructured({ data }: { data: any }) {
         if (node.type === 'heading') {
           const level = Math.min(node.level ?? 2, 6);
           const Tag = (`h${level}` as unknown) as keyof JSX.IntrinsicElements;
-          return <Tag key={i}>{text}</Tag>;
+          const id = slugify(text);
+          return (
+            <Tag key={i} id={id}>
+              {text}
+            </Tag>
+          );
         }
         if (node.type === 'paragraph') return <p key={i}>{text}</p>;
         return null;
@@ -63,6 +91,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   const rimg = article.image?.responsiveImage;
   const auteur = article.auteur;
+  const headings = extractHeadings(article.content);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-white">
@@ -72,7 +101,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-64 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(16,185,129,0.18),transparent)]"
       />
 
-      <main className="mx-auto max-w-3xl px-4 py-10 md:py-14">
+      <main className="mx-auto max-w-5xl px-4 py-10 md:py-14">
         {/* Fil d’Ariane */}
         <div className="mb-6 flex items-center justify-between">
           <nav aria-label="Fil d'ariane">
@@ -125,11 +154,29 @@ export default async function Page({ params }: { params: { slug: string } }) {
           </div>
         )}
 
-        {/* Contenu de l’article */}
+        {/* Contenu de l’article + Sommaire */}
         {article.content?.value && (
-          <article className="prose prose-slate prose-lg max-w-none prose-a:text-emerald-700 prose-blockquote:border-emerald-200 prose-blockquote:text-slate-700 prose-hr:border-emerald-100">
-            <RenderStructured data={article.content} />
-          </article>
+          <div className="md:flex md:gap-8">
+            <article className="prose prose-slate prose-lg max-w-none flex-1 prose-a:text-emerald-700 prose-blockquote:border-emerald-200 prose-blockquote:text-slate-700 prose-hr:border-emerald-100">
+              <RenderStructured data={article.content} />
+            </article>
+            {headings.length > 0 && (
+              <nav className="relative hidden w-56 flex-none md:block">
+                <div className="sticky top-20">
+                  <p className="text-sm font-medium text-slate-900">Sommaire</p>
+                  <ul className="mt-2 space-y-1 text-sm">
+                    {headings.map((h: any) => (
+                      <li key={h.id}>
+                        <a href={`#${h.id}`} className="text-emerald-700 hover:underline">
+                          {h.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </nav>
+            )}
+          </div>
         )}
 
         {/* Séparateur doux */}
