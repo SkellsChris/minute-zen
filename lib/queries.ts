@@ -28,7 +28,17 @@ export const ARTICLE_BY_SLUG = /* GraphQL */ `
           base64
         }
       }
-
+content {
+  value
+  blocks {
+    __typename
+    ... on FaqdetailRecord {
+      id
+      question
+      reponse { value }
+    }
+  }
+}
       auteur {
         nom
         imageauteur { url alt title }
