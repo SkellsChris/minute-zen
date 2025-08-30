@@ -73,14 +73,29 @@ export default async function Page({ params }: { params: { slug: string } }) {
       />
 
       <main className="mx-auto max-w-3xl px-4 py-10 md:py-14">
-        {/* Fil d’Ariane / retour */}
+        {/* Fil d’Ariane */}
         <div className="mb-6 flex items-center justify-between">
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 rounded-full border border-emerald-200/70 bg-white/70 px-3 py-1 text-sm text-emerald-700 transition hover:bg-white"
-          >
-            ← Retour au blog
-          </Link>
+          <nav aria-label="Fil d'ariane">
+            <ol className="flex flex-wrap items-center gap-2 text-sm">
+              <li>
+                <Link href="/" className="text-emerald-700 hover:underline">
+                  Accueil
+                </Link>
+              </li>
+              <li aria-hidden className="text-slate-500">
+                /
+              </li>
+              <li>
+                <Link href="/blog" className="text-emerald-700 hover:underline">
+                  Blog
+                </Link>
+              </li>
+              <li aria-hidden className="text-slate-500">
+                /
+              </li>
+              <li className="text-slate-700">{article.title}</li>
+            </ol>
+          </nav>
 
           {typeof article.lecture === 'number' && (
             <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-800">
