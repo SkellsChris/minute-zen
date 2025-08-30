@@ -119,14 +119,17 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
         {/* Image de couverture */}
         {rimg?.src && (
-          <div className="my-6 overflow-hidden rounded-2xl ring-1 ring-emerald-100 shadow">
+          <div
+            className="my-6 overflow-hidden rounded-2xl ring-1 ring-emerald-100 shadow"
+            style={{ height: Math.round(rimg.height / 2) }}
+          >
             <Image
               src={rimg.src}
               alt={rimg.alt ?? ''}
               width={rimg.width}
-              height={Math.round(rimg.height / 2)}
+              height={rimg.height}
               sizes="(max-width: 768px) 100vw, 768px"
-              className="h-auto w-full"
+              className="h-full w-full object-cover"
             />
           </div>
         )}

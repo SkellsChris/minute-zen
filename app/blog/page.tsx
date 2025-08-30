@@ -37,14 +37,19 @@ export default async function BlogIndex() {
               className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
             >
               {article.image?.responsiveImage && (
-                <Image
-                  src={article.image.responsiveImage.src}
-                  alt={article.image.responsiveImage.alt ?? article.title}
-                  width={article.image.responsiveImage.width}
-                  height={Math.round(article.image.responsiveImage.height / 2)}
-                  sizes={article.image.responsiveImage.sizes}
-                  className="w-full"
-                />
+                <div
+                  style={{ height: Math.round(article.image.responsiveImage.height / 2) }}
+                  className="overflow-hidden"
+                >
+                  <Image
+                    src={article.image.responsiveImage.src}
+                    alt={article.image.responsiveImage.alt ?? article.title}
+                    width={article.image.responsiveImage.width}
+                    height={article.image.responsiveImage.height}
+                    sizes={article.image.responsiveImage.sizes}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
               )}
               <div className="p-6">
                 <h2 className="text-xl font-semibold">
