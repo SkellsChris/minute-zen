@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import { datoRequest } from '@/lib/datocms';
 import { ALL_SLUGS, ARTICLE_BY_SLUG } from '@/lib/queries';
 import { renderStructuredText } from '@/lib/renderStructuredText';
@@ -212,6 +213,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         </div>
       </main>
     </div>
+    <Footer />
     </>
   );
 }
