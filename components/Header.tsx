@@ -10,7 +10,7 @@ export default function Header() {
     { name: 'Contact', href: '/contact' },
   ]
   return (
-    <header className="border-line">
+    <header className="border-line bg-white">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3 md:px-6">
         <Link href="/" className="flex items-center gap-2">
           <Icon name="lotus" className="w-6 h-6" />
