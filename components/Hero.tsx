@@ -21,13 +21,13 @@ export default function Hero() {
         <p className="max-w-md text-sm md:text-base text-white drop-shadow-md">Faites une micro-séance de 3 à 5 minutes pour détendre le corps, calmer le mental et repartir concentré.</p>
         <div className="flex gap-4">
           <a
-            href="#"
+            href="/pack-audio"
             className="rounded-full bg-white text-black px-6 py-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black"
           >
             Commencer
           </a>
           <a
-            href="/ressources-gratuites"
+            href="/pack-audio"
             className="rounded-full px-6 py-3 text-sm text-white border border-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white"
           >
             Découvrir

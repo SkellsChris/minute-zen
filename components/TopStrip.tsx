@@ -10,7 +10,7 @@ export default function TopStrip() {
           <span>MinuteZen</span>
         </div>
         <a
-          href="/ressources-gratuites"
+          href="/pack-audio"
           className="text-sm underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ink"
         >
           Découvrir les cours

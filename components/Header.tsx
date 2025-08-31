@@ -30,7 +30,7 @@ export default function Header() {
         <div className="flex items-center gap-4">
           <span className="md:hidden text-sm">Menu</span>
           <a
-            href="/ressources-gratuites"
+            href="/pack-audio"
             className="hidden md:inline-flex items-center gap-1 rounded-full border border-ink px-4 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ink"
           >
             Découvrir les cours
