@@ -1,7 +1,6 @@
 import TopStrip from '../../components/TopStrip'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
-import Image from 'next/image'
 import DownloadForm from '../../components/DownloadForm'
 
 export const metadata = {
@@ -40,18 +39,6 @@ export default function PackAudio() {
               <strong> libérer les tensions</strong> et <strong>retrouver de l’énergie</strong> au
               travail comme à la maison. Télécharge-les gratuitement et écoute-les partout.
             </p>
-
-            <div className="mt-10 flex items-center justify-center gap-6">
-              <div className="rounded-2xl border border-gray-200 bg-white/80 p-6 shadow-sm backdrop-blur">
-                <Image
-                  src="/pack-audio-mockup.svg"
-                  alt="Pack Audio MinuteZen – mockup smartphone et écouteurs"
-                  width={320}
-                  height={320}
-                  className="h-auto w-56 sm:w-72"
-                />
-              </div>
-            </div>
           </section>
 
           {/* Content grid: benefits + form */}
