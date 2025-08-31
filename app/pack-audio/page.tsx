@@ -6,6 +6,8 @@ import DownloadForm from '../../components/DownloadForm'
 
 export const metadata = {
   title: 'Pack Audio MinuteZen – MinuteZen',
+  description:
+    'Télécharge gratuitement 5 audios guidés (4–5 min) pour calmer ton stress, relâcher les tensions, rebooster ton énergie et t’endormir plus facilement.'
 }
 
 export default function PackAudio() {
@@ -13,44 +15,156 @@ export default function PackAudio() {
     <>
       <TopStrip />
       <Header />
-      <main className="mx-auto max-w-3xl px-4 py-16">
-        <section className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Calme ton esprit en 5 minutes – Télécharge gratuitement ton Pack Audio MinuteZen
-          </h1>
-          <p className="mt-4 text-gray-600">
-            Stress, fatigue, pensées qui tournent en boucle ? Avec ce pack gratuit de 5 audios guidés, découvre des exercices simples et efficaces pour retrouver ton calme, libérer les tensions et recharger ton énergie… en seulement quelques minutes par jour.
-          </p>
-          <div className="mt-8 flex justify-center">
-            <Image src="/pack-audio-mockup.svg" alt="Pack Audio MinuteZen" width={240} height={240} />
-          </div>
-        </section>
 
-        <section className="mt-12">
-          <h2 className="text-2xl font-semibold text-gray-900">Ce que tu vas recevoir</h2>
-          <ul className="mt-6 space-y-3 text-gray-700">
-            <li>🎧 Respiration anti-stress express – pour apaiser ton esprit immédiatement</li>
-            <li>🎧 Relâcher les épaules et la nuque – fini les tensions physiques accumulées</li>
-            <li>🎧 Micro-visualisation positive – retrouver confiance et clarté mentale</li>
-            <li>🎧 Pause énergie au bureau – recharge rapide pour éviter le coup de fatigue</li>
-            <li>🎧 Endormissement rapide – glisser vers un sommeil profond et réparateur</li>
-          </ul>
-        </section>
+      {/* Background gradient */}
+      <div className="relative isolate">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 -top-10 -z-10 h-[480px] bg-gradient-to-b from-emerald-100 via-white to-white"
+        />
 
-        <section className="mt-12">
-          <h2 className="text-2xl font-semibold text-gray-900">Télécharge ton Pack Audio MinuteZen gratuitement</h2>
-          <DownloadForm />
-        </section>
+        <main className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+          {/* Hero */}
+          <section className="mx-auto max-w-4xl text-center">
+            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700 ring-1 ring-emerald-200">
+              <span>🎁 Gratuit</span>
+              <span className="h-1 w-1 rounded-full bg-emerald-300" />
+              <span>5 audios guidés • 4–5 min</span>
+            </div>
 
-        <section className="mt-12">
-          <ul className="space-y-3 text-gray-700">
-            <li>⏱️ Des pauses courtes, 4–5 minutes seulement</li>
-            <li>🎧 Faciles à écouter partout : téléphone, bureau, lit</li>
-            <li>💡 Techniques validées par la science de la respiration et de la relaxation</li>
-            <li>🧘 Pas de bla-bla, juste l’essentiel pour retrouver ton équilibre</li>
-          </ul>
-        </section>
-      </main>
+            <h1 className="mt-6 text-balance text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
+              Calme ton esprit en 5 minutes
+            </h1>
+            <p className="mx-auto mt-4 max-w-3xl text-pretty text-lg text-gray-600">
+              Un pack d’audios prêts à écouter pour <strong>apaiser le stress</strong>,
+              <strong> libérer les tensions</strong> et <strong>retrouver de l’énergie</strong> au
+              travail comme à la maison. Télécharge-les gratuitement et écoute-les partout.
+            </p>
+
+            <div className="mt-10 flex items-center justify-center gap-6">
+              <div className="rounded-2xl border border-gray-200 bg-white/80 p-6 shadow-sm backdrop-blur">
+                <Image
+                  src="/pack-audio-mockup.svg"
+                  alt="Pack Audio MinuteZen – mockup smartphone et écouteurs"
+                  width={320}
+                  height={320}
+                  className="h-auto w-56 sm:w-72"
+                />
+              </div>
+            </div>
+          </section>
+
+          {/* Content grid: benefits + form */}
+          <section className="mt-14 grid gap-8 lg:grid-cols-2 lg:gap-12">
+            {/* Left: What you get + benefits */}
+            <div>
+              <h2 className="text-2xl font-semibold tracking-tight text-gray-900">Ce que tu vas recevoir</h2>
+              <ul className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {[
+                  'Respiration anti-stress express – apaiser immédiatement',
+                  'Relâcher épaules & nuque – dire adieu aux tensions',
+                  'Micro-visualisation positive – retrouver confiance & clarté',
+                  'Pause énergie au bureau – éviter le coup de fatigue',
+                  'Endormissement rapide – glisser vers un sommeil profond'
+                ].map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-start gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm"
+                  >
+                    <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">✓</span>
+                    <p className="text-gray-700">{item}</p>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-8 rounded-xl bg-emerald-50 p-5 text-emerald-900 ring-1 ring-emerald-200">
+                <p className="text-sm leading-relaxed">
+                  ⏱️ <strong>4–5 minutes par audio</strong> • 🎧 Écoute sur téléphone, ordinateur ou tablette • 🧘
+                  Sans blabla : des consignes simples et efficaces basées sur la respiration et la détente
+                  musculaire.
+                </p>
+              </div>
+
+              {/* FAQ simple */}
+              <div className="mt-10">
+                <h3 className="text-lg font-semibold text-gray-900">Questions fréquentes</h3>
+                <div className="mt-4 divide-y divide-gray-200 overflow-hidden rounded-2xl border border-gray-200">
+                  <details className="group p-5 open:bg-gray-50">
+                    <summary className="flex cursor-pointer list-none items-center justify-between font-medium text-gray-900">
+                      Est-ce vraiment gratuit ?
+                      <span className="ml-4 transition-transform group-open:rotate-180">⌄</span>
+                    </summary>
+                    <p className="mt-3 text-sm text-gray-600">
+                      Oui. Tu laisses ton email pour recevoir le pack et des conseils utiles. Tu peux te
+                      désinscrire en un clic à tout moment.
+                    </p>
+                  </details>
+                  <details className="group p-5 open:bg-gray-50">
+                    <summary className="flex cursor-pointer list-none items-center justify-between font-medium text-gray-900">
+                      Combien de temps ça prend ?
+                      <span className="ml-4 transition-transform group-open:rotate-180">⌄</span>
+                    </summary>
+                    <p className="mt-3 text-sm text-gray-600">
+                      Chaque audio dure environ <strong>4 à 5 minutes</strong>. L’idée : une pause courte, facile à
+                      caser dans la journée.
+                    </p>
+                  </details>
+                  <details className="group p-5 open:bg-gray-50">
+                    <summary className="flex cursor-pointer list-none items-center justify-between font-medium text-gray-900">
+                      Est-ce adapté aux débutants ?
+                      <span className="ml-4 transition-transform group-open:rotate-180">⌄</span>
+                    </summary>
+                    <p className="mt-3 text-sm text-gray-600">
+                      Oui. Les consignes sont guidées pas à pas, sans jargon. Tu peux commencer tout de suite,
+                      même si tu n’as jamais médité.
+                    </p>
+                  </details>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Form card */}
+            <div className="lg:sticky lg:top-24">
+              <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-xl">
+                <h2 className="text-2xl font-semibold tracking-tight text-gray-900">
+                  Télécharge le Pack Audio MinuteZen
+                </h2>
+                <p className="mt-2 text-sm text-gray-600">
+                  Reçois les 5 audios dans ta boîte mail + un mini guide d’utilisation.
+                </p>
+
+                <div className="mt-6">
+                  <DownloadForm />
+                </div>
+
+                <p className="mt-4 text-xs text-gray-500">
+                  🔒 Tes données sont protégées. Pas de spam. Désinscription en un clic.
+                </p>
+
+                <div className="mt-6 rounded-xl bg-gray-50 p-4 text-sm text-gray-700">
+                  <p className="font-medium">Ce pack est idéal si tu veux :</p>
+                  <ul className="mt-2 list-disc pl-5">
+                    <li>Un rituel rapide pour relâcher la pression entre deux tâches</li>
+                    <li>Des consignes simples pour détendre épaules, nuque et esprit</li>
+                    <li>Un coup de pouce pour t’endormir plus facilement</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Social proof / mini trust */}
+          <section className="mt-16">
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm">
+              <p className="text-sm text-gray-600">
+                Déjà utilisé par des lecteurs qui veulent <strong>moins de stress</strong> et
+                <strong> plus d’énergie</strong> au quotidien.
+              </p>
+            </div>
+          </section>
+        </main>
+      </div>
+
       <Footer />
     </>
   )
