@@ -64,50 +64,8 @@ export default function PackAudio() {
                 ))}
               </ul>
 
-              <div className="mt-8 rounded-xl bg-emerald-50 p-5 text-emerald-900 ring-1 ring-emerald-200">
-                <p className="text-sm leading-relaxed">
-                  ⏱️ <strong>1–2 minutes par audio</strong> • 🎧 Écoute sur téléphone, ordinateur ou tablette • 🧘
-                  Sans blabla : des consignes simples et efficaces basées sur la respiration et la détente
-                  musculaire.
-                </p>
-              </div>
-
               {/* FAQ simple */}
-              <div className="mt-10">
-                <h3 className="text-lg font-semibold text-gray-900">Questions fréquentes</h3>
-                <div className="mt-4 divide-y divide-gray-200 overflow-hidden rounded-2xl border border-gray-200">
-                  <details className="group p-5 open:bg-gray-50">
-                    <summary className="flex cursor-pointer list-none items-center justify-between font-medium text-gray-900">
-                      Est-ce vraiment gratuit ?
-                      <span className="ml-4 transition-transform group-open:rotate-180">⌄</span>
-                    </summary>
-                    <p className="mt-3 text-sm text-gray-600">
-                      Oui. Tu laisses ton email pour recevoir le pack et des conseils utiles. Tu peux te
-                      désinscrire en un clic à tout moment.
-                    </p>
-                  </details>
-                  <details className="group p-5 open:bg-gray-50">
-                    <summary className="flex cursor-pointer list-none items-center justify-between font-medium text-gray-900">
-                      Combien de temps ça prend ?
-                      <span className="ml-4 transition-transform group-open:rotate-180">⌄</span>
-                    </summary>
-                    <p className="mt-3 text-sm text-gray-600">
-                      Chaque audio dure environ <strong>1 à 2 minutes</strong>. L’idée : une pause courte, facile à
-                      caser dans la journée.
-                    </p>
-                  </details>
-                  <details className="group p-5 open:bg-gray-50">
-                    <summary className="flex cursor-pointer list-none items-center justify-between font-medium text-gray-900">
-                      Est-ce adapté aux débutants ?
-                      <span className="ml-4 transition-transform group-open:rotate-180">⌄</span>
-                    </summary>
-                    <p className="mt-3 text-sm text-gray-600">
-                      Oui. Les consignes sont guidées pas à pas, sans jargon. Tu peux commencer tout de suite,
-                      même si tu n’as jamais médité.
-                    </p>
-                  </details>
-                </div>
-              </div>
+              
             </div>
 
             {/* Right: Form card */}
