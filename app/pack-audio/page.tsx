@@ -12,8 +12,10 @@ export const metadata = {
 export default function PackAudio() {
   return (
     <>
+      <div className="sticky top-0 z-[60] bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <TopStrip />
       <Header />
+      </div>
 
       {/* Background gradient */}
       <div className="relative isolate">
