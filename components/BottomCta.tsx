@@ -13,7 +13,7 @@ export default function BottomCta() {
             </h2>
           </div>
           <a
-            href="/ressources-gratuites"
+            href="/pack-audio"
             className="rounded-full bg-white px-6 py-3 text-sm text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white"
           >
             Découvrir les cours
