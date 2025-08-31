@@ -6,7 +6,7 @@ import DownloadForm from '../../components/DownloadForm'
 export const metadata = {
   title: 'Pack Audio MinuteZen – MinuteZen',
   description:
-    'Télécharge gratuitement 5 audios guidés (4–5 min) pour calmer ton stress, relâcher les tensions, rebooster ton énergie et t’endormir plus facilement.'
+    'Télécharge gratuitement 5 audios guidés (1–2 min) pour calmer ton stress, relâcher les tensions, rebooster ton énergie et t’endormir plus facilement.'
 }
 
 export default function PackAudio() {
@@ -28,11 +28,11 @@ export default function PackAudio() {
             <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700 ring-1 ring-emerald-200">
               <span>🎁 Gratuit</span>
               <span className="h-1 w-1 rounded-full bg-emerald-300" />
-              <span>5 audios guidés • 4–5 min</span>
+              <span>5 audios guidés • 1–2 min</span>
             </div>
 
             <h1 className="mt-6 text-balance text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-              Calme ton esprit en 5 minutes
+              Calme ton esprit en 2 minutes
             </h1>
             <p className="mx-auto mt-4 max-w-3xl text-pretty text-lg text-gray-600">
               Un pack d’audios prêts à écouter pour <strong>apaiser le stress</strong>,
@@ -66,7 +66,7 @@ export default function PackAudio() {
 
               <div className="mt-8 rounded-xl bg-emerald-50 p-5 text-emerald-900 ring-1 ring-emerald-200">
                 <p className="text-sm leading-relaxed">
-                  ⏱️ <strong>4–5 minutes par audio</strong> • 🎧 Écoute sur téléphone, ordinateur ou tablette • 🧘
+                  ⏱️ <strong>1–2 minutes par audio</strong> • 🎧 Écoute sur téléphone, ordinateur ou tablette • 🧘
                   Sans blabla : des consignes simples et efficaces basées sur la respiration et la détente
                   musculaire.
                 </p>
@@ -92,7 +92,7 @@ export default function PackAudio() {
                       <span className="ml-4 transition-transform group-open:rotate-180">⌄</span>
                     </summary>
                     <p className="mt-3 text-sm text-gray-600">
-                      Chaque audio dure environ <strong>4 à 5 minutes</strong>. L’idée : une pause courte, facile à
+                      Chaque audio dure environ <strong>1 à 2 minutes</strong>. L’idée : une pause courte, facile à
                       caser dans la journée.
                     </p>
                   </details>
