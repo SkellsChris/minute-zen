@@ -28,3 +28,7 @@ Create a production build:
 npm run build
 ```
 
+## Environment Variables
+
+To enable email sending from the contact form, set the `SENDER_API_KEY` environment variable with your Sender API key.
+
