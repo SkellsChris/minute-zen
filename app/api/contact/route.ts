@@ -3,23 +3,23 @@ import { NextResponse } from 'next/server'
 export async function POST(request: Request) {
   const { name, email, subject, message } = await request.json()
 
-  // In development or test environments the RESEND_API_KEY might be
+  // In development or test environments the SENDER_API_KEY might be
   // missing. Instead of throwing an error and preventing the form from
   // working, simply log the message and return a success response.
-  if (!process.env.RESEND_API_KEY) {
-    console.warn('RESEND_API_KEY is not set. Skipping email send.')
+  if (!process.env.SENDER_API_KEY) {
+    console.warn('SENDER_API_KEY is not set. Skipping email send.')
     return NextResponse.json({ success: true })
   }
 
   try {
-    const res = await fetch('https://api.resend.com/emails', {
+    const res = await fetch('https://api.sender.net/email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        Authorization: `Bearer ${process.env.SENDER_API_KEY}`,
       },
       body: JSON.stringify({
-        from: 'Contact Form <onboarding@resend.dev>',
+        from: 'Contact Form <no-reply@minutezen.fr>',
         to: ['contact@minutezen.fr'],
         subject: subject || 'Message MinuteZen',
         reply_to: email,
