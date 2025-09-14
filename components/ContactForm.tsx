@@ -1,26 +1,37 @@
 "use client"
 
+import { useState } from 'react'
 import Link from 'next/link'
 
 export default function ContactForm() {
+  const [sent, setSent] = useState(false)
+  const [error, setError] = useState(false)
+
   return (
     <form
       className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault()
-        // Ouvre un email pré-rempli; remplace si tu branches un backend
+        setSent(false)
+        setError(false)
         const form = e.currentTarget as HTMLFormElement
         const data = new FormData(form)
-        const name = data.get('name') as string
-        const email = data.get('email') as string
-        const subject = data.get('subject') as string
-        const message = data.get('message') as string
-        const mailto = `mailto:contact@minutezen.fr?subject=${encodeURIComponent(
-          subject || 'Message MinuteZen'
-        )}&body=${encodeURIComponent(
-          `Nom: ${name}\nEmail: ${email}\n\n${message}`
-        )}`
-        window.location.href = mailto
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: data.get('name'),
+            email: data.get('email'),
+            subject: data.get('subject'),
+            message: data.get('message'),
+          }),
+        })
+        if (res.ok) {
+          setSent(true)
+          form.reset()
+        } else {
+          setError(true)
+        }
       }}
     >
       <div className="sm:col-span-1">
@@ -80,6 +91,12 @@ export default function ContactForm() {
           Envoyer
         </button>
       </div>
+      {sent && (
+        <p className="sm:col-span-2 text-sm text-green-600">Votre message a été envoyé.</p>
+      )}
+      {error && (
+        <p className="sm:col-span-2 text-sm text-red-600">Une erreur est survenue.</p>
+      )}
     </form>
   )
 }
