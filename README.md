@@ -42,6 +42,5 @@ Configure the following variables to enable form submissions:
 | `SMTP_FROM` | Email address used as envelope sender (defaults to `SMTP_USERNAME`). |
 | `SMTP_FROM_NAME` | Optional display name for the From header. |
 | `CONTACT_TO` | Comma-separated list of recipients for contact form submissions. |
-| `SENDER_API_KEY` | Sender API key used to subscribe leads from the Pack Audio form. |
-| `SENDER_LIST_ID` | Sender list ID where Pack Audio leads should be added. |
+| `SENDER_API` | Sender webhook endpoint used to subscribe Pack Audio leads to the `packaudio` automation. |
 
