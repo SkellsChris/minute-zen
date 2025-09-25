@@ -7,26 +7,23 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
   }
 
-  const apiKey = process.env.SENDER_API_KEY
-  const listId = process.env.SENDER_LIST_ID
+  const senderEndpoint = process.env.SENDER_API
 
-  if (!apiKey || !listId) {
+  if (!senderEndpoint) {
     console.warn('Sender configuration missing. Skipping subscription call.')
     return NextResponse.json({ success: true })
   }
 
   try {
-    const response = await fetch('https://api.sender.net/v2/contacts', {
+    const response = await fetch(senderEndpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
         email,
         firstname: name,
-        lists: [listId],
-        triggered_from: 'minutezen-pack-audio',
+        automation: 'packaudio',
       }),
     })
 
