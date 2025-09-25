@@ -17,12 +17,13 @@ export default function DownloadForm() {
         const data = new FormData(form)
         const name = data.get('name') as string
         const email = data.get('email') as string
+        const consentGiven = data.get('consent') === 'on'
 
         try {
           const res = await fetch('/api/pack-audio', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email }),
+            body: JSON.stringify({ name, email, consent: consentGiven }),
           })
 
           if (!res.ok) {
@@ -56,6 +57,23 @@ export default function DownloadForm() {
           className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-blue-400"
           placeholder="toi@exemple.com"
         />
+      </div>
+      <div className="sm:col-span-2">
+        <label className="flex items-start gap-3 text-sm text-slate-700">
+          <input
+            type="checkbox"
+            name="consent"
+            required
+            className="mt-1 h-4 w-4 rounded border border-slate-300 text-slate-900 focus:ring-2 focus:ring-slate-500"
+          />
+          <span>
+            Je consens à recevoir des emails de MinuteZen et j’ai lu la{' '}
+            <a className="underline" href="/politique-confidentialite" target="_blank" rel="noopener noreferrer">
+              politique de confidentialité
+            </a>
+            .
+          </span>
+        </label>
       </div>
       <div className="sm:col-span-2">
         <button
