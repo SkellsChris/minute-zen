@@ -30,5 +30,18 @@ npm run build
 
 ## Environment Variables
 
-To enable email sending from the contact form, set the `SENDER_API_KEY` environment variable with your Sender API key.
+Configure the following variables to enable form submissions:
+
+| Variable | Description |
+| --- | --- |
+| `SMTP_HOST` | OVH/Roundcube SMTP host (e.g. `ssl0.ovh.net`). |
+| `SMTP_PORT` | SMTP port, defaults to `465`. |
+| `SMTP_SECURE` | Set to `false` to disable implicit TLS (defaults to `true`). |
+| `SMTP_USERNAME` | SMTP account username. |
+| `SMTP_PASSWORD` | SMTP account password. |
+| `SMTP_FROM` | Email address used as envelope sender (defaults to `SMTP_USERNAME`). |
+| `SMTP_FROM_NAME` | Optional display name for the From header. |
+| `CONTACT_TO` | Comma-separated list of recipients for contact form submissions. |
+| `SENDER_API_KEY` | Sender API key used to subscribe leads from the Pack Audio form. |
+| `SENDER_LIST_ID` | Sender list ID where Pack Audio leads should be added. |
 
