@@ -5,7 +5,6 @@ import Icon from './Icon'
 export default function Header() {
   const nav = [
     { name: 'Accueil', href: '/' },
-    { name: 'Ressources gratuites', href: '/ressources-gratuites' },
     { name: 'Blog', href: '/blog' },
     { name: 'Contact', href: '/contact' },
   ]
