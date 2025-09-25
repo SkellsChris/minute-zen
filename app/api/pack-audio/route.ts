@@ -1,3 +1,4 @@
+// app/api/sender/subscribe/route.ts
 import { NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
@@ -8,7 +9,6 @@ function isEmail(s: string) {
 }
 
 export async function POST(request: Request) {
-  // Parse
   let body: any;
   try {
     body = await request.json();
@@ -16,11 +16,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: 'Invalid JSON' }, { status: 400 });
   }
 
-  // Normalise: accepte firstName | firstname | prenom | name
   const firstName = String(body?.firstName ?? body?.firstname ?? body?.prenom ?? body?.name ?? '').trim();
   const email = String(body?.email ?? '').trim();
 
-  // Validation
   if (!firstName || firstName.length > 100) {
     return NextResponse.json({ ok: false, error: 'Invalid first name' }, { status: 400 });
   }
@@ -28,36 +26,32 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: 'Invalid email' }, { status: 400 });
   }
 
-  // Config Sender
   const apiBase  = (process.env.SENDER_API_URL || 'https://api.sender.net/v2').replace(/\/$/, '');
   const apiToken = (process.env.SENDER_API_TOKEN || '').trim();
   if (!apiToken) {
     return NextResponse.json({ ok: false, error: 'Missing SENDER_API_TOKEN' }, { status: 500 });
   }
 
-  // Ciblage: on force le groupe bDE8Rx (via env), fallback tag si pas d’ID
+  // Groupe forcé (env > fallback)
   const groupId = (process.env.SENDER_GROUP_ID || 'bDE8Rx').trim();
-  const tag     = (process.env.SENDER_TAG || 'pack-audio').trim();
 
+  // ✅ IMPORTANT: Sender attend "firstname" (pas first_name)
   const payload: any = {
     email,
-    first_name: firstName,     // prénom
-    name: firstName,           // compatibilité
-    status: 'subscribed',      // si double opt-in activé: 'pending'
+    firstname: firstName,          // <-- le bon champ builtin
+    status: 'subscribed',          // 'pending' si double opt-in
+    groups: [groupId],
+    // optionnel si tu veux garder une trace:
     custom_fields: { source: 'pack-audio' },
-    // on mettra groups ou, en fallback, un tag
   };
 
-  if (groupId) payload.groups = [groupId];
-  else payload.tags = [tag];
-
-  const headers: Record<string, string> = {
+  const headers = {
     'Content-Type': 'application/json',
     Accept: 'application/json',
     Authorization: `Bearer ${apiToken}`,
   };
 
-  // Essai /contacts puis /subscribers (selon version d'API)
+  // Essai /contacts puis /subscribers selon version d'API
   const urls = [`${apiBase}/contacts`, `${apiBase}/subscribers`];
   const attempts: any[] = [];
 
