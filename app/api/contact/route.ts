@@ -1,247 +1,190 @@
-import net from 'node:net'
-import tls from 'node:tls'
+import nodemailer from 'nodemailer'
+import isEmail from 'validator/lib/isEmail'
 import { NextResponse } from 'next/server'
 
 export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 
-type SMTPOptions = {
-  host: string
-  port: number
-  secure: boolean
-  username?: string
-  password?: string
+function getClientIp(request: Request) {
+  const forwarded = request.headers.get('x-forwarded-for')
+  if (forwarded) {
+    const [ip] = forwarded.split(',').map((part) => part.trim()).filter(Boolean)
+    if (ip) {
+      return ip
+    }
+  }
+  return request.headers.get('cf-connecting-ip') || 'unknown'
 }
 
-type PendingResponse = {
-  expected: number[]
-  resolve: (response: SMTPResponse) => void
-  reject: (error: Error) => void
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
 }
 
-type SMTPResponse = {
-  code: number
-  message: string
+function normalizeLineBreaks(value: string) {
+  return value.replace(/\r\n/g, '\n').replace(/\r/g, '\n')
 }
 
-class SMTPClient {
-  private socket: net.Socket | tls.TLSSocket
-  private buffer = ''
-  private queue: PendingResponse[] = []
-  private responses: SMTPResponse[] = []
-  private current: { code: number; lines: string[] } | null = null
-  private closed = false
-
-  constructor(socket: net.Socket | tls.TLSSocket) {
-    this.socket = socket
-    this.socket.setEncoding('utf8')
-    this.socket.on('data', (chunk) => {
-      this.buffer += chunk
-      this.processBuffer()
-    })
-    this.socket.on('error', (err) => {
-      while (this.queue.length) {
-        this.queue.shift()?.reject(err)
-      }
-    })
-    this.socket.on('close', () => {
-      this.closed = true
-      while (this.queue.length) {
-        this.queue
-          .shift()
-          ?.reject(new Error('SMTP connection closed unexpectedly'))
-      }
-    })
-  }
-
-  async wait(expected: number[]) {
-    return new Promise<SMTPResponse>((resolve, reject) => {
-      this.queue.push({ expected, resolve, reject })
-      this.drain()
-    })
-  }
-
-  async command(command: string, expected: number[]) {
-    if (this.closed) {
-      throw new Error('SMTP connection is closed')
-    }
-    return new Promise<SMTPResponse>((resolve, reject) => {
-      this.queue.push({ expected, resolve, reject })
-      this.socket.write(`${command}\r\n`)
-      this.drain()
-    })
-  }
-
-  async data(payload: string, expected: number[]) {
-    if (this.closed) {
-      throw new Error('SMTP connection is closed')
-    }
-    return new Promise<SMTPResponse>((resolve, reject) => {
-      this.queue.push({ expected, resolve, reject })
-      this.socket.write(payload)
-      this.drain()
-    })
-  }
-
-  private processBuffer() {
-    while (true) {
-      const delimiterIndex = this.buffer.indexOf('\r\n')
-      if (delimiterIndex === -1) {
-        return
-      }
-      const line = this.buffer.slice(0, delimiterIndex)
-      this.buffer = this.buffer.slice(delimiterIndex + 2)
-      if (!line) {
-        continue
-      }
-      const code = Number.parseInt(line.slice(0, 3), 10)
-      const continuation = line[3] === '-'
-      const text = line.length > 4 ? line.slice(4) : ''
-      if (!this.current) {
-        this.current = { code, lines: [text] }
-      } else {
-        this.current.lines.push(text)
-      }
-      if (!continuation) {
-        const response: SMTPResponse = {
-          code: this.current.code,
-          message: this.current.lines.join('\n'),
-        }
-        this.current = null
-        this.responses.push(response)
-        this.drain()
-      }
-    }
-  }
-
-  private drain() {
-    while (this.queue.length && this.responses.length) {
-      const pending = this.queue.shift()!
-      const response = this.responses.shift()!
-      if (!pending.expected.includes(response.code)) {
-        pending.reject(
-          new Error(`SMTP command failed with ${response.code}: ${response.message}`)
-        )
-      } else {
-        pending.resolve(response)
-      }
-    }
-  }
-
-  close() {
-    if (!this.closed) {
-      this.socket.end()
-    }
-  }
-}
-
-async function connectSMTP(options: SMTPOptions) {
-  const socket = options.secure
-    ? tls.connect({
-        host: options.host,
-        port: options.port,
-        servername: options.host,
-      })
-    : net.createConnection({ host: options.host, port: options.port })
-
-  await new Promise<void>((resolve, reject) => {
-    const connectEvent = options.secure ? 'secureConnect' : 'connect'
-    socket.once(connectEvent, () => resolve())
-    socket.once('error', (err) => reject(err))
-  })
-
-  return new SMTPClient(socket)
-}
-
-async function sendSMTPMail(
-  options: SMTPOptions,
-  message: {
-    envelopeFrom: string
-    headerFrom: string
-    to: string[]
-    replyTo?: string
-    subject: string
-    text: string
-  }
-) {
-  const client = await connectSMTP(options)
-
-  try {
-    await client.wait([220])
-    await client.command('EHLO minutezen.fr', [250])
-
-    if (options.username && options.password) {
-      await client.command('AUTH LOGIN', [334])
-      await client.command(
-        Buffer.from(options.username, 'utf8').toString('base64'),
-        [334]
-      )
-      await client.command(
-        Buffer.from(options.password, 'utf8').toString('base64'),
-        [235]
-      )
-    }
-
-    await client.command(`MAIL FROM:<${message.envelopeFrom}>`, [250])
-    for (const recipient of message.to) {
-      await client.command(`RCPT TO:<${recipient}>`, [250, 251])
-    }
-    await client.command('DATA', [354])
-
-    const headers = [
-      `From: ${message.headerFrom}`,
-      `To: ${message.to.join(', ')}`,
-      `Subject: ${message.subject}`,
-      'MIME-Version: 1.0',
-      'Content-Type: text/plain; charset=utf-8',
-    ]
-    if (message.replyTo) {
-      headers.push(`Reply-To: ${message.replyTo}`)
-    }
-
-    const body = `${headers.join('\r\n')}\r\n\r\n${message.text}`
-      .replace(/\r?\n/g, '\r\n')
-      .replace(/\n\./g, '\n..')
-
-    await client.data(`${body}\r\n.\r\n`, [250])
-    await client.command('QUIT', [221, 250])
-  } finally {
-    client.close()
-  }
+function sanitizeHeader(value: string) {
+  return value.replace(/[\r\n]+/g, ' ').trim()
 }
 
 export async function POST(request: Request) {
-  const { name, email, subject, message } = await request.json()
+  const ip = getClientIp(request)
 
-  const host = process.env.SMTP_HOST
-  const port = process.env.SMTP_PORT ? Number.parseInt(process.env.SMTP_PORT, 10) : 465
-  const username = process.env.SMTP_USERNAME
-  const password = process.env.SMTP_PASSWORD
-  const fromEmail = process.env.SMTP_FROM || username
-  const fromName = process.env.SMTP_FROM_NAME
-  const to = process.env.CONTACT_TO || 'contact@minutezen.fr'
-  const secure = process.env.SMTP_SECURE !== 'false'
-
-  if (!host || !fromEmail) {
-    console.warn('SMTP credentials are not fully configured. Skipping email send.')
-    return NextResponse.json({ success: true })
+  let payload: unknown
+  try {
+    payload = await request.json()
+  } catch (error) {
+    console.log(`[contact] ip=${ip} status=400 subject="invalid-json"`)
+    return NextResponse.json(
+      { ok: false, error: 'Invalid JSON payload.' },
+      { status: 400 }
+    )
   }
+
+  const { name, email, subject, message } = (payload || {}) as Record<string, unknown>
+
+  const trimmedName = typeof name === 'string' ? name.trim() : ''
+  const trimmedEmail = typeof email === 'string' ? email.trim() : ''
+  const trimmedSubject = typeof subject === 'string' ? subject.trim() : ''
+  const normalizedMessage =
+    typeof message === 'string' ? normalizeLineBreaks(message.trim()) : ''
+
+  const safeName = sanitizeHeader(trimmedName)
+  const safeSubject = trimmedSubject ? sanitizeHeader(trimmedSubject) : ''
+  const safeEmail = trimmedEmail.replace(/[\r\n]+/g, '')
+
+  const errors: Record<string, string> = {}
+
+  if (trimmedName.length < 2 || trimmedName.length > 80) {
+    errors.name = 'Le nom doit contenir entre 2 et 80 caractères.'
+  }
+
+  if (!isEmail(trimmedEmail)) {
+    errors.email = "L'adresse email est invalide."
+  }
+
+  if (!trimmedSubject) {
+    errors.subject = 'Le sujet est requis.'
+  } else if (trimmedSubject.length > 120) {
+    errors.subject = 'Le sujet doit contenir au maximum 120 caractères.'
+  }
+
+  if (normalizedMessage.length < 10 || normalizedMessage.length > 5000) {
+    errors.message = 'Le message doit contenir entre 10 et 5000 caractères.'
+  }
+
+  if (Object.keys(errors).length > 0) {
+    console.log(
+      `[contact] ip=${ip} status=400 subject="${safeSubject || 'invalid'}"`
+    )
+    return NextResponse.json({ ok: false, error: errors }, { status: 400 })
+  }
+
+  const smtpUser = process.env.SMTP_USER
+  const smtpPass = process.env.SMTP_PASS
+  const smtpHost = process.env.SMTP_HOST || 'ssl0.ovh.net'
+  const smtpSecure = process.env.SMTP_SECURE === 'true'
+  const smtpPort = process.env.SMTP_PORT
+    ? Number.parseInt(process.env.SMTP_PORT, 10)
+    : smtpSecure
+    ? 465
+    : 587
+
+  const contactFrom = process.env.CONTACT_FROM || smtpUser
+  const contactTo = process.env.CONTACT_TO || smtpUser
+  const contactBcc = process.env.CONTACT_BCC
+
+  if (!smtpUser || !smtpPass || !contactFrom || !contactTo) {
+    console.log(
+      `[contact] ip=${ip} status=500 subject="${safeSubject}"`
+    )
+    return NextResponse.json(
+      {
+        ok: false,
+        error: 'Email service is not configured correctly.',
+      },
+      { status: 500 }
+    )
+  }
+
+  const transporter = nodemailer.createTransport({
+    host: smtpHost,
+    port: smtpPort,
+    secure: smtpSecure,
+    requireTLS: smtpSecure ? undefined : true,
+    auth: {
+      user: smtpUser,
+      pass: smtpPass,
+    },
+  })
 
   try {
-    await sendSMTPMail(
-      { host, port, secure, username, password },
-      {
-        envelopeFrom: fromEmail,
-        headerFrom: fromName ? `${fromName} <${fromEmail}>` : fromEmail,
-        to: to.split(',').map((recipient) => recipient.trim()).filter(Boolean),
-        replyTo: email,
-        subject: subject || 'Message MinuteZen',
-        text: `Nom: ${name}\nEmail: ${email}\n\n${message}`,
-      }
+    await transporter.verify()
+  } catch (error) {
+    console.log(
+      `[contact] ip=${ip} status=503 subject="${safeSubject}"`
     )
-  } catch (err) {
-    console.error('Error while sending contact email', err)
-    return NextResponse.json({ error: 'Failed to send email' }, { status: 500 })
+    return NextResponse.json(
+      { ok: false, error: 'Email service unavailable.' },
+      { status: 503 }
+    )
   }
 
-  return NextResponse.json({ success: true })
+  const recipients = contactTo
+    .split(',')
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+
+  const bccRecipients = contactBcc
+    ? contactBcc
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean)
+    : undefined
+
+  const finalBcc = bccRecipients && bccRecipients.length > 0 ? bccRecipients : undefined
+
+  if (recipients.length === 0) {
+    console.log(`[contact] ip=${ip} status=500 subject="${safeSubject}"`)
+    return NextResponse.json(
+      { ok: false, error: 'No recipients configured for contact emails.' },
+      { status: 500 }
+    )
+  }
+
+  const textBody = `Nom: ${trimmedName}\nEmail: ${trimmedEmail}\n\n${normalizedMessage}`
+  const htmlBody = `<!doctype html><html><body style="font-family:system-ui,sans-serif;color:#0f172a;">
+<p><strong>Nom :</strong> ${escapeHtml(trimmedName)}</p>
+<p><strong>Email :</strong> ${escapeHtml(trimmedEmail)}</p>
+<p><strong>Message :</strong><br/>${escapeHtml(normalizedMessage).replace(/\n/g, '<br/>')}</p>
+</body></html>`
+
+  const subjectLine = `[MinuteZen • Contact] ${safeSubject} — from ${safeName}`
+
+  try {
+    const info = await transporter.sendMail({
+      from: contactFrom,
+      to: recipients,
+      bcc: finalBcc,
+      replyTo: `${safeName} <${safeEmail}>`,
+      subject: subjectLine,
+      text: textBody,
+      html: htmlBody,
+    })
+
+    console.log(`[contact] ip=${ip} status=200 subject="${safeSubject}"`)
+    return NextResponse.json({ ok: true, messageId: info.messageId })
+  } catch (error) {
+    console.log(`[contact] ip=${ip} status=500 subject="${safeSubject}"`)
+    return NextResponse.json(
+      { ok: false, error: 'Failed to send the email.' },
+      { status: 500 }
+    )
+  }
 }
