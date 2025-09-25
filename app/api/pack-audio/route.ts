@@ -1,4 +1,4 @@
-// app/api/sender/subscribe/route.ts (ou app/api/pack-audio/route.ts selon ton arbo)
+// app/api/sender/subscribe/route.ts
 import { NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
@@ -9,7 +9,7 @@ function isEmail(s: string) {
 }
 
 export async function POST(request: Request) {
-  // -------- Parse body
+  // 1) Parse + normalise
   let body: any;
   try {
     body = await request.json();
@@ -17,13 +17,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: 'Invalid JSON' }, { status: 400 });
   }
 
-  // -------- Normalise champs (name / firstName / prenom)
   const firstName = String(
     body?.firstName ?? body?.firstname ?? body?.prenom ?? body?.name ?? ''
   ).trim();
   const email = String(body?.email ?? '').trim();
 
-  // -------- Validation
   if (!firstName || firstName.length > 100) {
     return NextResponse.json({ ok: false, error: 'Invalid first name' }, { status: 400 });
   }
@@ -31,59 +29,88 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: 'Invalid email' }, { status: 400 });
   }
 
-  // -------- Config Sender
-  const apiBase = (process.env.SENDER_API_URL || '').trim();
+  // 2) Config (supporte 2 modes)
+  const directEndpoint = (process.env.SENDER_API || '').trim();           // ex: webhook perso
+  const apiBase = (process.env.SENDER_API_URL || 'https://api.sender.net/v2').trim();
   const apiToken = (process.env.SENDER_API_TOKEN || '').trim();
 
-  if (!apiBase || !apiToken) {
-    return NextResponse.json(
-      { ok: false, error: 'Sender API is not configured (SENDER_API_URL or SENDER_API_TOKEN missing)' },
-      { status: 500 }
-    );
-  }
+  // Ciblage : liste OU groupe OU tag
+  const listId  = (process.env.SENDER_LIST_ID  || '').trim();             // ex: "123456"
+  const groupId = (process.env.SENDER_GROUP_ID || '').trim();             // ex: "bDE8Rx"
+  const tag     = (process.env.SENDER_TAG      || 'pack-audio').trim();   // fallback pratique
 
-  const baseUrl = apiBase.replace(/\/$/, '');
-  const url = `${baseUrl}/contacts`;
+  // Payload compatible (plusieurs APIs acceptent "first_name" ou "name")
+  const payload: any = {
+    email,
+    first_name: firstName,
+    name: firstName,
+    status: 'subscribed', // si double opt-in sur la liste, passer à 'pending'
+    custom_fields: { source: 'pack-audio' },
+  };
+
+  // Priorité: LISTE > GROUPE > TAG
+  if (listId) payload.lists = [listId];
+  else if (groupId) payload.groups = [groupId];
+  else payload.tags = [tag];
+
+  // 3) Construis les endpoints à essayer (tolérant selon version API)
+  const endpoints: string[] = [];
+  if (directEndpoint) {
+    endpoints.push(directEndpoint);
+  } else {
+    const base = apiBase.replace(/\/$/, '');
+    endpoints.push(`${base}/contacts`);     // le plus courant
+    endpoints.push(`${base}/subscribers`);  // alternative selon versions
+  }
 
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     Accept: 'application/json',
-    Authorization: `Bearer ${apiToken}`,
   };
-
-  const groupId = 'bDE8Rx';
-
-  // Payload générique Sender (ajuste si ton compte requiert un schéma différent)
-  const payload: any = {
-    email,
-    first_name: firstName,
-    status: 'subscribed',                 // si double opt-in actif sur la liste, tu peux mettre 'pending'
-    custom_fields: { source: 'pack-audio' },
-    groups: [groupId],
-  };
-
-  try {
-    const resp = await fetch(url, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(payload),
-    });
-
-    // Essaye de lire la réponse même en cas d’erreur pour debug
-    const data = await resp.json().catch(() => null);
-
-    if (!resp.ok) {
+  if (!directEndpoint) {
+    if (!apiToken) {
       return NextResponse.json(
-        { ok: false, code: resp.status, error: 'Sender API error', data },
+        { ok: false, error: 'Missing SENDER_API_TOKEN for Sender API' },
         { status: 500 }
       );
     }
-
-    return NextResponse.json({ ok: true, data }, { status: 200 });
-  } catch (err: any) {
-    return NextResponse.json(
-      { ok: false, error: err?.message || 'Network error' },
-      { status: 500 }
-    );
+    headers.Authorization = `Bearer ${apiToken}`;
+  } else {
+    // si tu veux sécuriser ton endpoint direct
+    if (process.env.SENDER_API_TOKEN) {
+      headers.Authorization = `Bearer ${process.env.SENDER_API_TOKEN}`;
+    }
   }
+
+  // 4) On tente en séquence, on remonte les erreurs détaillées
+  const attempts: any[] = [];
+  for (const url of endpoints) {
+    try {
+      const resp = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(payload),
+      });
+
+      const data = await resp.json().catch(() => null);
+
+      if (resp.ok) {
+        return NextResponse.json({ ok: true, data }, { status: 200 });
+      } else {
+        attempts.push({ url, status: resp.status, data });
+      }
+    } catch (e: any) {
+      attempts.push({ url, networkError: e?.message || String(e) });
+    }
+  }
+
+  // Rien n'a marché
+  return NextResponse.json(
+    {
+      ok: false,
+      error: 'Sender API error',
+      attempts, // ← tu verras ici exactement ce que répond l’API dans l’onglet Network
+    },
+    { status: 500 }
+  );
 }
