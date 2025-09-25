@@ -31,38 +31,36 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: 'Invalid email' }, { status: 400 });
   }
 
-  // -------- Config - deux modes
-  const directEndpoint = (process.env.SENDER_API || '').trim();          // Mode B
-  const apiBase = (process.env.SENDER_API_URL || '').trim();             // Mode A
-  const apiToken = (process.env.SENDER_API_TOKEN || '').trim();          // Mode A ou B (si besoin)
-  const listId  = (process.env.SENDER_LIST_ID || '').trim();             // Optionnel mais conseillé
+  // -------- Config Sender
+  const apiBase = (process.env.SENDER_API_URL || '').trim();
+  const apiToken = (process.env.SENDER_API_TOKEN || '').trim();
 
-  // Détermine l’URL finale et les headers
-  const url =
-    directEndpoint ||
-    (apiBase ? `${apiBase.replace(/\/$/, '')}/contacts` : '');
-
-  if (!url) {
+  if (!apiBase || !apiToken) {
     return NextResponse.json(
-      { ok: false, error: 'Sender API is not configured (SENDER_API or SENDER_API_URL missing)' },
+      { ok: false, error: 'Sender API is not configured (SENDER_API_URL or SENDER_API_TOKEN missing)' },
       { status: 500 }
     );
   }
 
+  const baseUrl = apiBase.replace(/\/$/, '');
+  const url = `${baseUrl}/contacts`;
+
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     Accept: 'application/json',
+    Authorization: `Bearer ${apiToken}`,
   };
-  if (apiToken) headers.Authorization = `Bearer ${apiToken}`;
+
+  const groupId = 'bDE8Rx';
 
   // Payload générique Sender (ajuste si ton compte requiert un schéma différent)
   const payload: any = {
     email,
     first_name: firstName,
     status: 'subscribed',                 // si double opt-in actif sur la liste, tu peux mettre 'pending'
-    custom_fields: { source: 'pack-audio' }
+    custom_fields: { source: 'pack-audio' },
+    groups: [groupId],
   };
-  if (listId) payload.lists = [listId];
 
   try {
     const resp = await fetch(url, {
